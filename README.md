@@ -9,6 +9,7 @@ A modern starter configuration for full-stack TypeScript applications with Expre
 - **Modern tooling**: Vite for frontend, nodemon for backend
 - **Zero-config development** - just run `yarn dev`
 - **Production-ready** build system
+- **Code quality**: ESLint and Prettier for consistent code formatting and linting
 
 ## Project Structure
 
@@ -46,7 +47,7 @@ A modern starter configuration for full-stack TypeScript applications with Expre
     - After doing this you can start VSCode on a repo with `code .`
 - Install TSLint extension in VSCode https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-tslint-plugin
 - In order to run the debugger for backend/tests put a breakpoint in VSCode and run this command in VSCode (`CMD + SHIFT + P`): `Debug: attach node to process`. You can also enable `Debug: Toggle Auto Attach` to start the debugger every time a node process is started from VSCode terminal.
-- To open a terminal in VSCode: `` CTRL + `  ``
+- To open a terminal in VSCode: ``CTRL + ` ``
 
 ## Usage
 
@@ -68,6 +69,10 @@ A modern starter configuration for full-stack TypeScript applications with Expre
 
 - Build frontend only: `yarn build:frontend`
 - Run tests: `yarn test`
+- Check linting: `yarn lint`
+- Fix linting issues: `yarn lint:fix`
+- Format code with Prettier: `yarn prettier`
+- Check Prettier formatting: `yarn prettier:check`
 - Preview production build: `yarn preview`
 - Clean build artifacts: `yarn clean`
 
