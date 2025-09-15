@@ -1,12 +1,13 @@
-# Express React Starter
+# In-Browser File Explorer
 
-A modern starter configuration for full-stack TypeScript applications with Express and React, featuring hot reload for both frontend and backend.
+A modern full-stack TypeScript application with Express backend and React frontend, featuring hot reload and comprehensive testing.
 
 ## Features
 
 - **Full-stack TypeScript** with Express backend and React frontend
 - **Hot reload for both frontend and backend** with a single command
 - **Modern tooling**: Vite for frontend, nodemon for backend
+- **Comprehensive testing** with Jest
 - **Zero-config development** - just run `yarn dev`
 - **Production-ready** build system
 - **Code quality**: ESLint and Prettier for consistent code formatting and linting
@@ -18,75 +19,156 @@ A modern starter configuration for full-stack TypeScript applications with Expre
 │   ├── frontend/          # React frontend code
 │   │   ├── App.tsx       # Main React component
 │   │   ├── main.ts       # Frontend entry point
-│   │   └── index.html    # Legacy HTML template (deprecated)
-│   └── backend/          # Express backend code
-│       ├── main.ts       # Modern backend server
-│       └── main.legacy.ts # Legacy backend server (deprecated)
+│   │   └── index.html    # HTML template
+│   ├── backend/          # Express backend code
+│   │   ├── main.ts       # Backend server
+│   │   └── example.spec.ts # Example test file
+│   └── test-setup.ts     # Jest test setup
 ├── index.html            # Frontend HTML template
 ├── vite.config.ts        # Vite configuration
+├── jest.config.js        # Jest configuration
 ├── nodemon.json          # Nodemon configuration
-├── build.js              # Custom build script
-├── webpack.config.js     # Legacy Webpack config (deprecated)
-└── tsconfig.legacy.json  # Legacy TypeScript config (deprecated)
+└── tsconfig.json         # TypeScript configuration
 ```
 
-## Dependencies
+## Prerequisites
 
-- Install `node`
-  - Use NVM (https://github.com/nvm-sh/nvm): `nvm install lts/dubnium && nvm use lts/dubnium`
-  - Alternatively you can download and install it manually: https://nodejs.org/en/download/
-- Install `yarn ^1.10.1`
-  - Use brew (https://brew.sh/): `brew install yarn`
-  - Alternatively you can download and install it manually: https://classic.yarnpkg.com/en/docs/install
+- **Node.js** >= 18.0.0
+- **Yarn** >= 1.22.0
+
+## Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd in-browser-file-explorer
+
+# Install dependencies
+yarn install
+```
 
 ## Development
 
-- Download and install VSCode: https://code.visualstudio.com/
-- Read the setup guide https://code.visualstudio.com/docs/setup/setup-overview
-  - Launching VSCode from the command line: Open the Command Palette (F1) and type `shell command` to find the `Shell Command: Install 'code' command in PATH command`
-    - After doing this you can start VSCode on a repo with `code .`
-- Install TSLint extension in VSCode https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-tslint-plugin
-- In order to run the debugger for backend/tests put a breakpoint in VSCode and run this command in VSCode (`CMD + SHIFT + P`): `Debug: attach node to process`. You can also enable `Debug: Toggle Auto Attach` to start the debugger every time a node process is started from VSCode terminal.
-- To open a terminal in VSCode: ``CTRL + ` ``
+### Start Development Server
 
-## Usage
+```bash
+# Start both frontend and backend with hot reload
+yarn dev
+```
 
-### Development (Recommended)
+This will start:
 
-- Install dependencies: `yarn install`
-- **Start development with hot reload for both frontend and backend**: `yarn dev`
-  - Frontend: http://localhost:3000 (Vite dev server with hot reload)
-  - Backend: http://localhost:8080 (Express server with nodemon auto-restart)
-  - Both servers run concurrently with a single command
-  - **Note**: In development, frontend and backend run on separate ports for hot reload
+- **Frontend**: http://localhost:3000 (Vite dev server with hot reload)
+- **Backend**: http://localhost:8080 (Express server with nodemon auto-restart)
 
-### Production Build
+### Individual Services
 
-- Build application (both frontend and backend): `yarn build`
-- Run production server (serves both frontend and backend on port 8080): `yarn start`
+```bash
+# Frontend only
+yarn dev:frontend
 
-### Additional Commands
+# Backend only
+yarn dev:backend
+```
 
-- Build frontend only: `yarn build:frontend`
-- Run tests: `yarn test`
-- Check linting: `yarn lint`
-- Fix linting issues: `yarn lint:fix`
-- Format code with Prettier: `yarn prettier`
-- Check Prettier formatting: `yarn prettier:check`
-- Preview production build: `yarn preview`
-- Clean build artifacts: `yarn clean`
+## Testing
 
-### Legacy Webpack Commands (Deprecated)
+```bash
+# Run all tests
+yarn test
 
-⚠️ **These commands are deprecated and will be removed in a future version. Use the modern commands above instead.**
+# Run tests in watch mode
+yarn test:watch
 
-- `yarn legacy:build` - Legacy Webpack build (use `yarn build` instead)
-- `yarn legacy:build-watch` - Legacy Webpack watch (use `yarn dev` instead)
-- `yarn legacy:build-hot-reload` - Legacy Webpack dev server (use `yarn dev` instead)
-- `yarn legacy:start` - Legacy Webpack start (use `yarn start` instead)
-- `yarn legacy:test` - Legacy Webpack test (use `yarn test` instead)
+# Run tests with coverage report
+yarn test:coverage
+```
 
-## Useful links
+## Production
 
-- Typescript guide: https://basarat.gitbook.io/typescript/
-- VSCode custom settings: https://github.com/gianluca-venturini/env_confs/tree/master/vs_codet
+### Build
+
+```bash
+# Build both frontend and backend
+yarn build
+```
+
+### Start Production Server
+
+```bash
+# Start production server
+yarn start
+```
+
+## Code Quality
+
+```bash
+# Check linting
+yarn lint
+
+# Fix linting issues
+yarn lint:fix
+
+# Format code with Prettier
+yarn prettier
+
+# Check Prettier formatting
+yarn prettier:check
+```
+
+## Utilities
+
+```bash
+# Preview production build
+yarn preview
+
+# Clean build artifacts
+yarn clean
+
+# Clean everything (including node_modules)
+yarn clean:all
+```
+
+## Technology Stack
+
+### Frontend
+
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+
+### Backend
+
+- **Express** - Web framework
+- **TypeScript** - Type safety
+- **Nodemon** - Development server
+
+### Testing
+
+- **Jest** - Test framework
+- **ts-jest** - TypeScript support for Jest
+
+### Development Tools
+
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Concurrently** - Run multiple commands
+
+## API Endpoints
+
+- `GET /api/time` - Returns current server time
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Make your changes
+4. Run tests: `yarn test`
+5. Check code quality: `yarn lint && yarn prettier:check`
+6. Commit your changes: `git commit -m 'Add feature'`
+7. Push to the branch: `git push origin feature-name`
+8. Submit a pull request
+
+## License
+
+MIT
