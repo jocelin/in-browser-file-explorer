@@ -1,6 +1,7 @@
 {
 	"name": "webpack-start",
 	"version": "1.0.0",
+	"type": "module",
 	"repository": "git@github.com:gianluca-venturini/express-react-webpack-starter.git",
 	"author": "Gianluca Venturini <gianluca@stellarite.io>",
 	"license": "MIT",
@@ -26,6 +27,7 @@
 		"node": ">=10.18.0"
 	},
 	"devDependencies": {
+		"@tailwindcss/vite": "^4.1.13",
 		"@types/express": "^4.17.23",
 		"@types/jest": "^30.0.0",
 		"@types/react": "^18.3.24",
@@ -42,6 +44,7 @@
 		"prettier": "^3.6.2",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
+		"tailwindcss": "^4.1.13",
 		"ts-jest": "^29.4.1",
 		"tsx": "^4.20.5",
 		"typescript": "^5.9.2",
