@@ -206,15 +206,18 @@ export const FileExplorer: React.FC = () => {
 				<EmptyState />
 			)}
 
-			<CreateDialog
-				isOpen={showCreateDialog}
-				createNodeType={createNodeType}
-				newNodeName={newNodeName}
-				onClose={handleCloseCreateDialog}
-				onCreateNodeTypeChange={setCreateNodeType}
-				onNewNodeNameChange={setNewNodeName}
-				onCreateNode={handleCreateNode}
-			/>
+			{selectedNode && (
+				<CreateDialog
+					isOpen={showCreateDialog}
+					createNodeType={createNodeType}
+					selectedNode={selectedNode}
+					newNodeName={newNodeName}
+					onClose={handleCloseCreateDialog}
+					onCreateNodeTypeChange={setCreateNodeType}
+					onNewNodeNameChange={setNewNodeName}
+					onCreateNode={handleCreateNode}
+				/>
+			)}
 		</div>
 	);
 };

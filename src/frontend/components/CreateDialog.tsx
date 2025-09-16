@@ -1,9 +1,13 @@
 import React from 'react';
 
+import { FileSystemNode } from '../types';
+import { SelectedNodeInfo } from './SelectedNodeInfo';
+
 interface CreateDialogProps {
 	isOpen: boolean;
 	createNodeType: 'file' | 'directory';
 	newNodeName: string;
+	selectedNode: FileSystemNode;
 	onClose: () => void;
 	onCreateNodeTypeChange: (type: 'file' | 'directory') => void;
 	onNewNodeNameChange: (name: string) => void;
@@ -14,12 +18,15 @@ export const CreateDialog: React.FC<CreateDialogProps> = ({
 	isOpen,
 	createNodeType,
 	newNodeName,
+	selectedNode,
 	onClose,
 	onCreateNodeTypeChange,
 	onNewNodeNameChange,
 	onCreateNode,
 }) => {
-	if (!isOpen) return null;
+	if (!isOpen) {
+		return null;
+	}
 
 	const handleKeyPress = (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') {
@@ -30,7 +37,12 @@ export const CreateDialog: React.FC<CreateDialogProps> = ({
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
 			<div className="bg-white p-6 rounded-lg min-w-96 shadow-xl">
-				<h3 className="text-xl font-semibold mb-5">Create New Item</h3>
+				<div className="text-xl font-semibold mb-5">
+					<h3>Create New Item</h3>
+					<h4>
+						<SelectedNodeInfo selectedNode={selectedNode} />
+					</h4>
+				</div>
 
 				<div className="mb-4">
 					<label className="block mb-2 font-semibold">Type:</label>
