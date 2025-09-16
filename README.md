@@ -2,6 +2,8 @@
 
 A modern full-stack TypeScript application with Express backend and React frontend, featuring hot reload and comprehensive testing.
 
+See also [FILE_EXPLORER_README](./docs/FILE_EXPLORER_README.md) for details.
+
 ## Features
 
 - **Full-stack TypeScript** with Express backend and React frontend
@@ -16,13 +18,8 @@ A modern full-stack TypeScript application with Express backend and React fronte
 
 ```
 ├── src/
-│   ├── frontend/          # React frontend code
-│   │   ├── App.tsx       # Main React component
-│   │   ├── main.ts       # Frontend entry point
-│   │   └── index.html    # HTML template
+│   ├── frontend/         # React frontend code
 │   ├── backend/          # Express backend code
-│   │   ├── main.ts       # Backend server
-│   │   └── example.spec.ts # Example test file
 │   └── test-setup.ts     # Jest test setup
 ├── index.html            # Frontend HTML template
 ├── vite.config.ts        # Vite configuration
