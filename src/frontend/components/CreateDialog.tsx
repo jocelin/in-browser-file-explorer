@@ -1,42 +1,80 @@
-import React from 'react';
-
-import { FileSystemNode } from '../types';
+import React, { useCallback, useState, useEffect } from 'react';
+import {
+	ButtonClass,
+	CreateNodeRequest,
+	FileSystemNode,
+	NodeType,
+} from '../types';
 import { SelectedNodeInfo } from './SelectedNodeInfo';
 
 interface CreateDialogProps {
 	isOpen: boolean;
-	createNodeType: 'file' | 'directory';
-	newNodeName: string;
-	selectedNode: FileSystemNode;
 	onClose: () => void;
-	onCreateNodeTypeChange: (type: 'file' | 'directory') => void;
-	onNewNodeNameChange: (name: string) => void;
-	onCreateNode: () => void;
+	selectedNode: FileSystemNode | null;
+	createNode: (request: CreateNodeRequest) => FileSystemNode | null;
 }
 
 export const CreateDialog: React.FC<CreateDialogProps> = ({
 	isOpen,
-	createNodeType,
-	newNodeName,
-	selectedNode,
 	onClose,
-	onCreateNodeTypeChange,
-	onNewNodeNameChange,
-	onCreateNode,
+	selectedNode,
+	createNode,
 }) => {
-	if (!isOpen) {
+	const [nodeType, setNodeType] = useState<NodeType>('file');
+	const [nodeName, setNodeName] = useState('');
+
+	// Reset form when dialog opens
+	useEffect(() => {
+		if (isOpen) {
+			setNodeName('');
+			setNodeType('file');
+		}
+	}, [isOpen]);
+
+	const handleCreateNode = useCallback(() => {
+		if (
+			!nodeName?.trim() ||
+			!selectedNode ||
+			selectedNode.type !== 'directory'
+		) {
+			return;
+		}
+
+		const result = createNode?.({
+			name: nodeName.trim(),
+			type: nodeType,
+			parentId: selectedNode.id,
+		});
+
+		if (result) {
+			setNodeName('');
+			setNodeType('file');
+			onClose();
+		}
+	}, [selectedNode, nodeName, nodeType, createNode, onClose]);
+
+	const handleKeyPress = useCallback(
+		(e: React.KeyboardEvent) => {
+			if (e.key === 'Enter') {
+				handleCreateNode();
+			}
+		},
+		[handleCreateNode]
+	);
+
+	const handleClose = useCallback(() => {
+		setNodeName('');
+		setNodeType('file');
+		onClose();
+	}, [onClose]);
+
+	if (!isOpen || !selectedNode) {
 		return null;
 	}
 
-	const handleKeyPress = (e: React.KeyboardEvent) => {
-		if (e.key === 'Enter') {
-			onCreateNode();
-		}
-	};
-
 	return (
-		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-			<div className="bg-white p-6 rounded-lg min-w-96 shadow-xl">
+		<div className="fixed inset-0 backdrop-invert backdrop-opacity-20 flex items-center justify-center z-50">
+			<div className="bg-white p-6 rounded-lg min-w-96 shadow-xl border border-gray-200">
 				<div className="text-xl font-semibold mb-5">
 					<h3>Create New Item</h3>
 					<h4>
@@ -52,9 +90,9 @@ export const CreateDialog: React.FC<CreateDialogProps> = ({
 								type="radio"
 								name="nodeType"
 								value="file"
-								checked={createNodeType === 'file'}
+								checked={nodeType === 'file'}
 								onChange={e =>
-									onCreateNodeTypeChange(e.target.value as 'file' | 'directory')
+									setNodeType(e.target.value as 'file' | 'directory')
 								}
 								className="mr-2"
 							/>
@@ -65,9 +103,9 @@ export const CreateDialog: React.FC<CreateDialogProps> = ({
 								type="radio"
 								name="nodeType"
 								value="directory"
-								checked={createNodeType === 'directory'}
+								checked={nodeType === 'directory'}
 								onChange={e =>
-									onCreateNodeTypeChange(e.target.value as 'file' | 'directory')
+									setNodeType(e.target.value as 'file' | 'directory')
 								}
 								className="mr-2"
 							/>
@@ -80,25 +118,25 @@ export const CreateDialog: React.FC<CreateDialogProps> = ({
 					<label className="block mb-2 font-semibold">Name:</label>
 					<input
 						type="text"
-						value={newNodeName}
-						onChange={e => onNewNodeNameChange(e.target.value)}
-						placeholder={`Enter ${createNodeType} name...`}
+						value={nodeName}
+						onChange={e => setNodeName(e.target.value)}
+						placeholder={`Enter ${nodeType} name...`}
 						className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
 						onKeyDown={handleKeyPress}
 						autoFocus
 					/>
 				</div>
 
-				<div className="flex gap-3 justify-end">
+				<div className="flex justify-end space-x-3">
 					<button
-						onClick={onClose}
-						className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors cursor-pointer"
+						onClick={handleClose}
+						className={`${ButtonClass.size.md} ${ButtonClass.variants.secondary}`}
 					>
 						Cancel
 					</button>
 					<button
-						onClick={onCreateNode}
-						className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors cursor-pointer"
+						onClick={handleCreateNode}
+						className={`${ButtonClass.size.md} ${ButtonClass.variants.primary}`}
 					>
 						Create
 					</button>

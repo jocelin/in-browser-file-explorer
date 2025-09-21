@@ -1,7 +1,8 @@
 import React from 'react';
 
-interface ErrorDisplayProps {
+interface ErrorDisplayProps extends React.ComponentProps<'div'> {
 	error: string | null;
+	onDismiss?: () => void;
 }
 
 export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ error }) => {

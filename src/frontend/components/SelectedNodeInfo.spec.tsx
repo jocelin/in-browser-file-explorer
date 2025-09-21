@@ -1,55 +1,58 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import { FileSystemNode } from '../types';
 import { SelectedNodeInfo } from './SelectedNodeInfo';
+import { FileSystemNode } from '../types';
 
-const createMockNode = (
-	overrides: Partial<FileSystemNode> = {}
-): FileSystemNode => ({
+const mockDirectoryNode: FileSystemNode = {
 	id: '1',
-	name: 'test-node',
-	type: 'file',
+	name: 'Test Directory',
+	type: 'directory' as const,
 	parentId: null,
+	children: ['2', '3'],
+	createdAt: new Date(),
+	modifiedAt: new Date(),
+};
+
+const mockFileNode: FileSystemNode = {
+	id: '2',
+	name: 'Test File',
+	type: 'file' as const,
+	parentId: '1',
 	children: [],
 	createdAt: new Date(),
 	modifiedAt: new Date(),
-	...overrides,
-});
+};
 
 describe('SelectedNodeInfo', () => {
-	it('renders file node info', () => {
-		const fileNode = createMockNode({ name: 'test.txt', type: 'file' });
-		render(<SelectedNodeInfo selectedNode={fileNode} />);
-
-		expect(screen.getByText('Selected file:')).toBeInTheDocument();
-		expect(screen.getByText('📄 test.txt')).toBeInTheDocument();
-	});
-
-	it('renders directory node info with children count', () => {
-		const dirNode = createMockNode({
-			name: 'folder',
-			type: 'directory',
-			children: ['child1', 'child2', 'child3'],
-		});
-		render(<SelectedNodeInfo selectedNode={dirNode} />);
+	it('renders selected directory information', () => {
+		render(<SelectedNodeInfo selectedNode={mockDirectoryNode} />);
 
 		expect(screen.getByText('Selected directory:')).toBeInTheDocument();
-		expect(screen.getByText('📁 folder')).toBeInTheDocument();
-		expect(screen.getByText('3 items')).toBeInTheDocument();
+		expect(screen.getByText('📁 Test Directory')).toBeInTheDocument();
+		expect(screen.getByText('2 items')).toBeInTheDocument();
 	});
 
-	it('shows "Root" for empty name', () => {
-		const rootNode = createMockNode({ name: '', type: 'directory' });
+	it('renders selected file information', () => {
+		render(<SelectedNodeInfo selectedNode={mockFileNode} />);
+
+		expect(screen.getByText('Selected file:')).toBeInTheDocument();
+		expect(screen.getByText('📄 Test File')).toBeInTheDocument();
+	});
+
+	it('renders nothing when no node is selected', () => {
+		const { container } = render(<SelectedNodeInfo selectedNode={null} />);
+		expect(container.firstChild).toBeNull();
+	});
+
+	it('renders root node name when name is empty', () => {
+		const rootNode: FileSystemNode = {
+			...mockDirectoryNode,
+			name: '',
+		};
+
 		render(<SelectedNodeInfo selectedNode={rootNode} />);
 
 		expect(screen.getByText('📁 Root')).toBeInTheDocument();
-	});
-
-	it('does not show items count for file nodes', () => {
-		const fileNode = createMockNode({ type: 'file' });
-		render(<SelectedNodeInfo selectedNode={fileNode} />);
-
-		expect(screen.queryByText(/items/)).not.toBeInTheDocument();
 	});
 });

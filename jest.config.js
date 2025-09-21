@@ -4,7 +4,7 @@ export default {
 		{
 			displayName: 'backend',
 			testEnvironment: 'node',
-			roots: ['<rootDir>/src'],
+			roots: ['<rootDir>/src/backend'],
 			testMatch: ['**/*.spec.ts', '**/*.test.ts'],
 			transform: {
 				'^.+\\.ts$': [
@@ -20,7 +20,7 @@ export default {
 		{
 			displayName: 'frontend',
 			testEnvironment: 'jsdom',
-			roots: ['<rootDir>/src'],
+			roots: ['<rootDir>/src/frontend'],
 			testMatch: ['**/*.spec.(ts|tsx)', '**/*.test.(ts|tsx)'],
 			setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.ts'],
 			transform: {
@@ -44,7 +44,7 @@ export default {
 		'!src/**/index.ts',
 		'!src/backend/main.ts',
 		'!src/frontend/main.tsx',
-		'!src/frontend/App.tsx',
+		'!src/frontend/types/**',
 	],
 	coverageDirectory: 'coverage',
 	coverageReporters: ['text', 'lcov', 'html'],

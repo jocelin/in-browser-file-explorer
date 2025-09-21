@@ -33,7 +33,7 @@ describe('ControlButton', () => {
 
 		const button = screen.getByRole('button');
 		expect(button).toBeDisabled();
-		expect(button).toHaveClass('cursor-not-allowed', 'bg-gray-100');
+		expect(button).toHaveClass('btn--md', 'btn--primary');
 
 		fireEvent.click(button);
 		expect(mockOnClick).not.toHaveBeenCalled();
@@ -45,33 +45,33 @@ describe('ControlButton', () => {
 				Small
 			</ControlButton>
 		);
-		expect(screen.getByRole('button')).toHaveClass('px-3', 'py-1.5');
+		expect(screen.getByRole('button')).toHaveClass('btn--sm', 'btn--primary');
 
 		rerender(
 			<ControlButton onClick={mockOnClick} variant="primary" size="lg">
 				Large
 			</ControlButton>
 		);
-		expect(screen.getByRole('button')).toHaveClass('px-6', 'py-3', 'text-base');
+		expect(screen.getByRole('button')).toHaveClass('btn--lg', 'btn--primary');
 	});
 
 	it('applies variant styles when enabled', () => {
 		const variants = [
 			{
 				variant: 'primary' as const,
-				classes: ['border-blue-300', 'text-blue-600'],
+				classes: ['btn--primary'],
 			},
 			{
 				variant: 'secondary' as const,
-				classes: ['border-gray-300', 'text-gray-600'],
+				classes: ['btn--secondary'],
 			},
 			{
 				variant: 'danger' as const,
-				classes: ['border-red-300', 'text-red-600'],
+				classes: ['btn--danger'],
 			},
 			{
 				variant: 'ghost' as const,
-				classes: ['border-purple-300', 'text-purple-700'],
+				classes: ['btn--ghost'],
 			},
 		];
 
@@ -94,7 +94,7 @@ describe('ControlButton', () => {
 			</ControlButton>
 		);
 
-		expect(screen.getByRole('button')).toHaveClass('px-4', 'py-2', 'text-sm');
+		expect(screen.getByRole('button')).toHaveClass('btn--md', 'btn--primary');
 	});
 
 	it('includes base styling classes', () => {
@@ -105,11 +105,6 @@ describe('ControlButton', () => {
 		);
 
 		const button = screen.getByRole('button');
-		expect(button).toHaveClass(
-			'font-medium',
-			'rounded-lg',
-			'border',
-			'inline-flex'
-		);
+		expect(button).toHaveClass('btn--md', 'btn--primary');
 	});
 });

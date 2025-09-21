@@ -1,38 +1,29 @@
-export interface FileSystemNode {
-	id: string;
-	name: string;
-	type: 'file' | 'directory';
-	parentId: string | null;
-	children: string[]; // IDs of child nodes
-	createdAt: Date;
-	modifiedAt: Date;
-}
+/**
+ * Types Index - Clean Interface for Type Exports
+ *
+ * This file serves as the main entry point for all TypeScript types.
+ * It provides a clean interface for importing types while keeping
+ * the implementation details in separate files based on responsibility.
+ *
+ * Only truly shared types that are needed across the application
+ * are exported here. Component-specific types are co-located
+ * with their respective components.
+ */
 
-export interface FileSystemState {
-	nodes: Map<string, FileSystemNode>;
-	rootId: string | null;
-	selectedNodeId: string | null;
-}
+/**
+ * Types Index - Clean Interface for Type Exports
+ *
+ * This file serves as the main entry point for all TypeScript types.
+ * It provides a clean interface for importing types while keeping
+ * the implementation details in separate files based on responsibility.
+ *
+ * Only truly shared types that are needed across the application
+ * are exported here. Component-specific types are co-located
+ * with their respective components.
+ */
 
-export interface TreeNode {
-	node: FileSystemNode;
-	level: number;
-	isExpanded: boolean;
-	isVisible: boolean;
-	parentPath: string[];
-}
+// Core File System Types
+export * from './fileSystem';
 
-export interface CreateNodeRequest {
-	name: string;
-	type: 'file' | 'directory';
-	parentId: string;
-}
-
-export interface FileSystemError extends Error {
-	code:
-		| 'NODE_NOT_FOUND'
-		| 'INVALID_NAME'
-		| 'DUPLICATE_NAME'
-		| 'INVALID_PARENT'
-		| 'ROOT_DELETE';
-}
+// Button Types and Constants
+export * from './button';

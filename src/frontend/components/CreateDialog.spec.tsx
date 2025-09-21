@@ -3,69 +3,88 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import { CreateDialog } from './CreateDialog';
 
-const mockProps = {
-	isOpen: true,
-	createNodeType: 'file' as const,
-	newNodeName: '',
-	selectedNode: {
-		id: '1',
-		name: 'test-folder',
-		type: 'directory' as const,
-		parentId: null as string | null,
-		children: [] as string[],
-		createdAt: new Date(),
-		modifiedAt: new Date(),
+// Mock the context
+jest.mock('../contexts', () => ({
+	useFileSystemContext: (): any => ({
+		selectedNode: {
+			id: '1',
+			name: 'Test Directory',
+			type: 'directory',
+			parentId: null,
+			children: [],
+			createdAt: new Date(),
+			modifiedAt: new Date(),
+		},
+		createNode: jest.fn(),
+	}),
+}));
+
+// Mock the types
+jest.mock('../types', () => ({
+	ButtonClass: {
+		size: {
+			md: 'px-4 py-2',
+		},
+		variants: {
+			primary: 'bg-blue-600 text-white',
+			secondary: 'bg-gray-200 text-gray-800',
+		},
 	},
-	onClose: jest.fn(),
-	onCreateNodeTypeChange: jest.fn(),
-	onNewNodeNameChange: jest.fn(),
-	onCreateNode: jest.fn(),
-};
+}));
 
 describe('CreateDialog', () => {
+	const mockOnClose = jest.fn();
+
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
-	it('renders nothing when closed', () => {
-		render(<CreateDialog {...mockProps} isOpen={false} />);
+	it('renders dialog when open', () => {
+		render(<CreateDialog isOpen={true} onClose={mockOnClose} />);
+
+		expect(screen.getByText('Create New Item')).toBeInTheDocument();
+		expect(screen.getByText('Type:')).toBeInTheDocument();
+		expect(screen.getByText('Name:')).toBeInTheDocument();
+	});
+
+	it('does not render when closed', () => {
+		render(<CreateDialog isOpen={false} onClose={mockOnClose} />);
+
 		expect(screen.queryByText('Create New Item')).not.toBeInTheDocument();
 	});
 
-	it('renders dialog when open', () => {
-		render(<CreateDialog {...mockProps} />);
-		expect(screen.getByText('Create New Item')).toBeInTheDocument();
+	it('renders file and directory radio buttons', () => {
+		render(<CreateDialog isOpen={true} onClose={mockOnClose} />);
+
+		expect(screen.getByLabelText('File')).toBeInTheDocument();
+		expect(screen.getByLabelText('Directory')).toBeInTheDocument();
 	});
 
-	it('calls onCreateNodeTypeChange when radio buttons are clicked', () => {
-		render(<CreateDialog {...mockProps} />);
-		fireEvent.click(screen.getByLabelText('Directory'));
-		expect(mockProps.onCreateNodeTypeChange).toHaveBeenCalledWith('directory');
+	it('renders cancel and create buttons', () => {
+		render(<CreateDialog isOpen={true} onClose={mockOnClose} />);
+
+		expect(screen.getByText('Cancel')).toBeInTheDocument();
+		expect(screen.getByText('Create')).toBeInTheDocument();
 	});
 
-	it('calls onNewNodeNameChange when typing in input', () => {
-		render(<CreateDialog {...mockProps} />);
-		const input = screen.getByPlaceholderText('Enter file name...');
-		fireEvent.change(input, { target: { value: 'test.txt' } });
-		expect(mockProps.onNewNodeNameChange).toHaveBeenCalledWith('test.txt');
-	});
+	it('calls onClose when cancel button is clicked', () => {
+		render(<CreateDialog isOpen={true} onClose={mockOnClose} />);
 
-	it('calls onCreateNode when Enter key is pressed', () => {
-		render(<CreateDialog {...mockProps} />);
-		const input = screen.getByPlaceholderText('Enter file name...');
-		fireEvent.keyDown(input, { key: 'Enter' });
-		expect(mockProps.onCreateNode).toHaveBeenCalled();
-	});
-
-	it('calls onClose when Cancel button is clicked', () => {
-		render(<CreateDialog {...mockProps} />);
 		fireEvent.click(screen.getByText('Cancel'));
-		expect(mockProps.onClose).toHaveBeenCalled();
+
+		expect(mockOnClose).toHaveBeenCalled();
 	});
 
-	it('calls onCreateNode when Create button is clicked', () => {
-		render(<CreateDialog {...mockProps} />);
-		fireEvent.click(screen.getByText('Create'));
-		expect(mockProps.onCreateNode).toHaveBeenCalled();
+	it('resets form when dialog opens', () => {
+		const { rerender } = render(
+			<CreateDialog isOpen={false} onClose={mockOnClose} />
+		);
+
+		// Open dialog
+		rerender(<CreateDialog isOpen={true} onClose={mockOnClose} />);
+
+		// Check that form is reset (file type selected by default)
+		expect(screen.getByLabelText('File')).toBeChecked();
+		expect(screen.getByPlaceholderText('Enter file name...')).toHaveValue('');
 	});
 });

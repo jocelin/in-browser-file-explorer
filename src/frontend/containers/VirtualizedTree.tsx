@@ -1,129 +1,51 @@
-import React, { useState, useMemo, useCallback } from 'react';
-
-import { FileSystemNode } from '../types';
+import React, { useCallback } from 'react';
+import { useFileSystemContext } from '../contexts';
+import { useVirtualizedTree } from '../hooks';
 
 interface VirtualizedTreeProps {
-	nodes: FileSystemNode[];
-	rootId: string | null;
-	selectedNodeId: string | null;
 	expandedNodes: Set<string>;
-	onNodeSelect: (nodeId: string) => void;
-	onNodeToggle: (nodeId: string) => void;
-	itemHeight?: number;
-	containerHeight?: number;
-}
-
-interface VirtualizedItem {
-	node: FileSystemNode;
-	level: number;
-	isExpanded: boolean;
-	isVisible: boolean;
-	index: number;
+	toggleNode: (nodeId: string) => void;
 }
 
 export const VirtualizedTree: React.FC<VirtualizedTreeProps> = ({
-	nodes,
-	rootId,
-	selectedNodeId,
 	expandedNodes,
-	onNodeSelect,
-	onNodeToggle,
-	itemHeight = 32,
-	containerHeight = 400,
+	toggleNode,
 }) => {
-	const [scrollTop, setScrollTop] = useState(0);
+	const { allNodes, rootNode, selectedNodeId, selectNode } =
+		useFileSystemContext();
 
-	// Build flat list of visible nodes
-	const visibleItems = useMemo(() => {
-		if (!rootId) return [];
-
-		const items: VirtualizedItem[] = [];
-		const nodeMap = new Map(nodes.map(node => [node.id, node]));
-
-		const buildVisibleItems = (nodeId: string, level: number = 0) => {
-			const node = nodeMap.get(nodeId);
-			if (!node) return;
-
-			const isExpanded = expandedNodes.has(nodeId);
-			const isVisible = level === 0 || expandedNodes.has(node.parentId || '');
-
-			items.push({
-				node,
-				level,
-				isExpanded,
-				isVisible,
-				index: items.length,
-			});
-
-			// Add children if expanded
-			if (isExpanded && node.type === 'directory') {
-				const children = node.children
-					.map(childId => nodeMap.get(childId))
-					.filter((child): child is FileSystemNode => child !== undefined)
-					.sort((a, b) => {
-						// Directories first, then files, then alphabetically
-						if (a.type !== b.type) {
-							return a.type === 'directory' ? -1 : 1;
-						}
-						return a.name.localeCompare(b.name);
-					});
-
-				children.forEach(child => {
-					buildVisibleItems(child.id, level + 1);
-				});
-			}
-		};
-
-		buildVisibleItems(rootId);
-		return items;
-	}, [nodes, rootId, expandedNodes]);
-
-	// Calculate visible range
-	const visibleRange = useMemo(() => {
-		const startIndex = Math.floor(scrollTop / itemHeight);
-		const endIndex = Math.min(
-			startIndex + Math.ceil(containerHeight / itemHeight) + 1,
-			visibleItems.length
-		);
-		return { startIndex, endIndex };
-	}, [scrollTop, itemHeight, containerHeight, visibleItems.length]);
-
-	// Get visible items
-	const visibleItemsSlice = useMemo(() => {
-		return visibleItems.slice(visibleRange.startIndex, visibleRange.endIndex);
-	}, [visibleItems, visibleRange]);
-
-	const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-		setScrollTop(e.currentTarget.scrollTop);
-	}, []);
+	const { visibleItemsSlice, totalHeight, handleScroll, visibleRange } =
+		useVirtualizedTree(allNodes, rootNode?.id || null, expandedNodes, 32, 500);
 
 	const handleNodeClick = useCallback(
 		(nodeId: string) => {
-			onNodeSelect(nodeId);
+			selectNode(nodeId);
 		},
-		[onNodeSelect]
+		[selectNode]
 	);
 
 	const handleToggleClick = useCallback(
 		(e: React.MouseEvent, nodeId: string) => {
 			e.stopPropagation();
-			onNodeToggle(nodeId);
+			toggleNode(nodeId);
 		},
-		[onNodeToggle]
+		[toggleNode]
 	);
 
-	const totalHeight = visibleItems.length * itemHeight;
+	if (!rootNode) {
+		return null;
+	}
 
 	return (
 		<div
 			className="virtualized-tree border border-gray-300 rounded-md overflow-auto"
-			style={{ height: containerHeight }}
+			style={{ height: 500 }}
 			onScroll={handleScroll}
 		>
 			<div className="relative" style={{ height: totalHeight }}>
 				{visibleItemsSlice.map((item, index) => {
 					const actualIndex = visibleRange.startIndex + index;
-					const top = actualIndex * itemHeight;
+					const top = actualIndex * 32;
 					const isSelected = selectedNodeId === item.node.id;
 					const itemCount = item.node.children.length;
 
@@ -135,7 +57,7 @@ export const VirtualizedTree: React.FC<VirtualizedTreeProps> = ({
 							}`}
 							style={{
 								top,
-								height: itemHeight,
+								height: 32,
 								paddingLeft: `${item.level * 20 + 8}px`,
 							}}
 							onClick={() => handleNodeClick(item.node.id)}

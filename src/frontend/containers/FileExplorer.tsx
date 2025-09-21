@@ -1,169 +1,40 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 
-import { FileSystemService } from '../services';
-import { CreateNodeRequest } from '../types';
+import { useFileSystemContext } from '../contexts';
+import { useExpandedNodes } from '../hooks';
 import {
-	Controls,
-	CreateDialog,
+	ErrorBoundary,
+	ConfirmationDialog,
 	EmptyState,
 	ErrorDisplay,
-	Statistics,
 } from '../components';
 
-import { VirtualizedTree } from './VirtualizedTree';
+import { Controls, VirtualizedTree, Statistics } from './';
 
-// Main FileExplorer Component
+// Main FileExplorer Container Component
 export const FileExplorer: React.FC = () => {
-	const [fileSystem] = useState(() => new FileSystemService());
-	const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
-	const [showCreateDialog, setShowCreateDialog] = useState(false);
-	const [createNodeType, setCreateNodeType] = useState<'file' | 'directory'>(
-		'file'
-	);
-	const [newNodeName, setNewNodeName] = useState('');
-	const [error, setError] = useState<string | null>(null);
-	// Add a refresh counter to force re-renders when file system changes
-	const [, setRefreshKey] = useState(0);
+	const { rootNode, error, resetFileSystem, createRoot } =
+		useFileSystemContext();
+	const { expandedNodes, toggleNode, expandAll, collapseAll } =
+		useExpandedNodes();
 
-	const forceRefresh = useCallback(() => {
-		setRefreshKey(prev => prev + 1);
+	// State for confirmation dialog
+	const [showResetConfirmation, setShowResetConfirmation] =
+		React.useState(false);
+
+	const handleResetRequest = useCallback(() => {
+		setShowResetConfirmation(true);
 	}, []);
 
-	const state = fileSystem.getState();
-	const selectedNode = fileSystem.getSelectedNode();
-	const rootNode = fileSystem.getRootNode();
+	const handleConfirmReset = useCallback(() => {
+		resetFileSystem();
+		createRoot('Root');
+		setShowResetConfirmation(false);
+	}, [resetFileSystem, createRoot]);
 
-	const handleNodeSelect = useCallback(
-		(nodeId: string) => {
-			try {
-				fileSystem.selectNode(nodeId);
-				setError(null);
-				forceRefresh(); // Force re-render after state change
-			} catch (err) {
-				setError(err instanceof Error ? err.message : 'Failed to select node');
-			}
-		},
-		[fileSystem, forceRefresh]
-	);
-
-	const handleNodeToggle = useCallback((nodeId: string) => {
-		setExpandedNodes(prev => {
-			const newSet = new Set(prev);
-			if (newSet.has(nodeId)) {
-				newSet.delete(nodeId);
-			} else {
-				newSet.add(nodeId);
-			}
-			return newSet;
-		});
+	const handleCancelReset = useCallback(() => {
+		setShowResetConfirmation(false);
 	}, []);
-
-	const handleCreateNode = useCallback(() => {
-		if (!selectedNode || selectedNode.type !== 'directory') {
-			setError('Please select a directory to create a new item');
-			return;
-		}
-
-		if (!newNodeName?.trim()) {
-			setError('Please enter a name for the new item');
-			return;
-		}
-
-		try {
-			const request: CreateNodeRequest = {
-				name: newNodeName.trim(),
-				type: createNodeType,
-				parentId: selectedNode.id,
-			};
-
-			fileSystem.createNode(request);
-			setNewNodeName('');
-			setShowCreateDialog(false);
-			setError(null);
-
-			// Auto-expand parent directory to show new item
-			setExpandedNodes(prev => new Set(prev).add(selectedNode.id));
-			forceRefresh(); // Force re-render after creating node
-		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Failed to create node');
-		}
-	}, [selectedNode, newNodeName, createNodeType, fileSystem, forceRefresh]);
-
-	const handleDeleteNode = useCallback(() => {
-		if (!selectedNode) {
-			setError('Please select a node to delete');
-			return;
-		}
-
-		if (selectedNode.id === rootNode?.id) {
-			setError('Cannot delete the root directory');
-			return;
-		}
-
-		try {
-			fileSystem.deleteNode(selectedNode.id);
-			setError(null);
-			forceRefresh(); // Force re-render after deleting node
-		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Failed to delete node');
-		}
-	}, [selectedNode, rootNode, fileSystem, forceRefresh]);
-
-	const handleGenerateExampleData = useCallback(() => {
-		try {
-			fileSystem.generateExampleData();
-			setExpandedNodes(new Set());
-			setError(null);
-			forceRefresh(); // Force re-render after generating data
-		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : 'Failed to generate example data'
-			);
-		}
-	}, [fileSystem, forceRefresh]);
-
-	const handleCreateRoot = useCallback(() => {
-		try {
-			fileSystem.createRootDirectory('Root');
-			setError(null);
-			forceRefresh(); // Force re-render after creating root
-		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : 'Failed to create root directory'
-			);
-		}
-	}, [fileSystem, forceRefresh]);
-
-	const handleExpandAll = useCallback(() => {
-		const allDirectoryIds = fileSystem
-			.getAllNodes()
-			.filter(node => node.type === 'directory')
-			.map(node => node.id);
-
-		setExpandedNodes(new Set(allDirectoryIds));
-	}, [fileSystem]);
-
-	const handleCollapseAll = useCallback(() => {
-		setExpandedNodes(new Set());
-	}, []);
-
-	const handleCloseCreateDialog = useCallback(() => {
-		setShowCreateDialog(false);
-		setNewNodeName('');
-	}, []);
-
-	const nodeCount = useMemo(() => {
-		return fileSystem.getAllNodes().length;
-	}, [fileSystem]);
-
-	const directoryCount = useMemo(() => {
-		return fileSystem.getAllNodes().filter(node => node.type === 'directory')
-			.length;
-	}, [fileSystem]);
-
-	const fileCount = useMemo(() => {
-		return fileSystem.getAllNodes().filter(node => node.type === 'file').length;
-	}, [fileSystem]);
 
 	return (
 		<div className="file-explorer p-5 font-sans max-w-6xl mx-auto">
@@ -172,52 +43,38 @@ export const FileExplorer: React.FC = () => {
 			</h1>
 
 			<ErrorDisplay error={error} />
-
-			<Controls
-				rootNode={rootNode}
-				selectedNode={selectedNode}
-				onCreateRoot={handleCreateRoot}
-				onShowCreateDialog={() => setShowCreateDialog(true)}
-				onDeleteNode={handleDeleteNode}
-				onExpandAll={handleExpandAll}
-				onCollapseAll={handleCollapseAll}
-				onGenerateExampleData={handleGenerateExampleData}
-			/>
-
-			{rootNode && (
-				<Statistics
-					nodeCount={nodeCount}
-					directoryCount={directoryCount}
-					fileCount={fileCount}
-				/>
-			)}
-
-			{rootNode ? (
-				<VirtualizedTree
-					nodes={fileSystem.getAllNodes()}
-					rootId={rootNode.id}
-					selectedNodeId={state.selectedNodeId}
+			<ErrorBoundary>
+				<Controls
 					expandedNodes={expandedNodes}
-					onNodeSelect={handleNodeSelect}
-					onNodeToggle={handleNodeToggle}
-					containerHeight={500}
+					toggleNode={toggleNode}
+					expandAll={expandAll}
+					collapseAll={collapseAll}
+					onResetRequest={handleResetRequest}
 				/>
-			) : (
-				<EmptyState />
-			)}
+			</ErrorBoundary>
 
-			{selectedNode && (
-				<CreateDialog
-					isOpen={showCreateDialog}
-					createNodeType={createNodeType}
-					selectedNode={selectedNode}
-					newNodeName={newNodeName}
-					onClose={handleCloseCreateDialog}
-					onCreateNodeTypeChange={setCreateNodeType}
-					onNewNodeNameChange={setNewNodeName}
-					onCreateNode={handleCreateNode}
-				/>
-			)}
+			<Statistics />
+
+			<ErrorBoundary>
+				{rootNode ? (
+					<VirtualizedTree
+						expandedNodes={expandedNodes}
+						toggleNode={toggleNode}
+					/>
+				) : (
+					<EmptyState />
+				)}
+			</ErrorBoundary>
+
+			<ConfirmationDialog
+				isOpen={showResetConfirmation}
+				title="Reset File System"
+				message="Are you sure you want to reset the file system? This will delete all files and directories and create a new root node."
+				confirmText="Reset"
+				cancelText="Cancel"
+				onConfirm={handleConfirmReset}
+				onCancel={handleCancelReset}
+			/>
 		</div>
 	);
 };
