@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { FileSystemNode, TreeNode } from '../types';
+import React, { useState, useMemo, useCallback } from 'react';
+
+import { FileSystemNode } from '../types';
 
 interface VirtualizedTreeProps {
 	nodes: FileSystemNode[];

@@ -33,7 +33,7 @@ export const Controls: React.FC<ControlsProps> = ({
 
 		<div className="flex gap-3 flex-wrap items-center">
 			{!rootNode && (
-				<ControlButton onClick={onCreateRoot} variant="green" size="lg">
+				<ControlButton onClick={onCreateRoot} variant="primary" size="lg">
 					🌱 Create Root Directory
 				</ControlButton>
 			)}
@@ -43,28 +43,28 @@ export const Controls: React.FC<ControlsProps> = ({
 					<ControlButton
 						onClick={onShowCreateDialog}
 						disabled={!selectedNode || selectedNode.type !== 'directory'}
-						variant="blue"
+						variant="primary"
 					>
-						➕ Create New Item
+						✨ Create New Item
 					</ControlButton>
 
 					<ControlButton
 						onClick={onDeleteNode}
 						disabled={!selectedNode || selectedNode.id === rootNode.id}
-						variant="red"
+						variant="danger"
 					>
 						🗑️ Delete Selected
 					</ControlButton>
 
-					<ControlButton onClick={onExpandAll} variant="blue">
+					<ControlButton onClick={onExpandAll} variant="secondary">
 						📂 Expand All
 					</ControlButton>
 
-					<ControlButton onClick={onCollapseAll} variant="blue">
+					<ControlButton onClick={onCollapseAll} variant="secondary">
 						📁 Collapse All
 					</ControlButton>
 
-					<ControlButton onClick={onGenerateExampleData} variant="purple">
+					<ControlButton onClick={onGenerateExampleData} variant="ghost">
 						⚡ Generate 10K Files
 					</ControlButton>
 				</>

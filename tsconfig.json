@@ -13,15 +13,10 @@
 		"jsx": "react",
 		"outDir": "dist",
 		"rootDir": "src",
+		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"types": ["jest", "node"]
+		"types": ["jest", "node", "@testing-library/jest-dom"]
 	},
 	"include": ["src/backend/**/*"],
-	"exclude": [
-		"node_modules",
-		"src/frontend",
-		"src/test-setup.ts",
-		"**/*.spec.ts",
-		"**/*.test.ts"
-	]
+	"exclude": ["node_modules", "src/frontend", "src/test/setupTests.ts"]
 }

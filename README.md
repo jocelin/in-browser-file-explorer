@@ -20,7 +20,7 @@ See also [FILE_EXPLORER_README](./docs/FILE_EXPLORER_README.md) for details.
 ├── src/
 │   ├── frontend/         # React frontend code
 │   ├── backend/          # Express backend code
-│   └── test-setup.ts     # Jest test setup
+│   └── test/             # Jest test setup
 ├── index.html            # Frontend HTML template
 ├── vite.config.ts        # Vite configuration
 ├── jest.config.js        # Jest configuration

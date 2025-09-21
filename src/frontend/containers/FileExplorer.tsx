@@ -2,15 +2,15 @@ import React, { useState, useCallback, useMemo } from 'react';
 
 import { FileSystemService } from '../services';
 import { CreateNodeRequest } from '../types';
-
 import {
 	Controls,
 	CreateDialog,
 	EmptyState,
 	ErrorDisplay,
 	Statistics,
-	VirtualizedTree,
 } from '../components';
+
+import { VirtualizedTree } from './VirtualizedTree';
 
 // Main FileExplorer Component
 export const FileExplorer: React.FC = () => {
@@ -23,7 +23,7 @@ export const FileExplorer: React.FC = () => {
 	const [newNodeName, setNewNodeName] = useState('');
 	const [error, setError] = useState<string | null>(null);
 	// Add a refresh counter to force re-renders when file system changes
-	const [refreshKey, setRefreshKey] = useState(0);
+	const [, setRefreshKey] = useState(0);
 
 	const forceRefresh = useCallback(() => {
 		setRefreshKey(prev => prev + 1);
@@ -64,7 +64,7 @@ export const FileExplorer: React.FC = () => {
 			return;
 		}
 
-		if (!newNodeName.trim()) {
+		if (!newNodeName?.trim()) {
 			setError('Please enter a name for the new item');
 			return;
 		}
@@ -141,7 +141,7 @@ export const FileExplorer: React.FC = () => {
 			.map(node => node.id);
 
 		setExpandedNodes(new Set(allDirectoryIds));
-	}, [fileSystem, refreshKey]); // Add refreshKey as dependency
+	}, [fileSystem]);
 
 	const handleCollapseAll = useCallback(() => {
 		setExpandedNodes(new Set());
@@ -154,16 +154,16 @@ export const FileExplorer: React.FC = () => {
 
 	const nodeCount = useMemo(() => {
 		return fileSystem.getAllNodes().length;
-	}, [fileSystem, refreshKey]); // Add refreshKey as dependency
+	}, [fileSystem]);
 
 	const directoryCount = useMemo(() => {
 		return fileSystem.getAllNodes().filter(node => node.type === 'directory')
 			.length;
-	}, [fileSystem, refreshKey]); // Add refreshKey as dependency
+	}, [fileSystem]);
 
 	const fileCount = useMemo(() => {
 		return fileSystem.getAllNodes().filter(node => node.type === 'file').length;
-	}, [fileSystem, refreshKey]); // Add refreshKey as dependency
+	}, [fileSystem]);
 
 	return (
 		<div className="file-explorer p-5 font-sans max-w-6xl mx-auto">
