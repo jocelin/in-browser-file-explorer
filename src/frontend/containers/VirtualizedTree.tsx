@@ -1,19 +1,13 @@
 import React, { useCallback } from 'react';
-import { useFileSystemContext } from '../contexts';
+import { useFileSystemContext, useTreeContext } from '../contexts';
 import { useVirtualizedTree } from '../hooks';
 
-interface VirtualizedTreeProps {
-	expandedNodes: Set<string>;
-	toggleNode: (nodeId: string) => void;
-}
+interface VirtualizedTreeProps {}
 
-export const VirtualizedTree: React.FC<VirtualizedTreeProps> = ({
-	expandedNodes,
-	toggleNode,
-}) => {
+export const VirtualizedTree: React.FC<VirtualizedTreeProps> = () => {
 	const { allNodes, rootNode, selectedNodeId, selectNode } =
 		useFileSystemContext();
-
+	const { expandedNodes, toggleNode } = useTreeContext();
 	const { visibleItemsSlice, totalHeight, handleScroll, visibleRange } =
 		useVirtualizedTree(allNodes, rootNode?.id || null, expandedNodes, 32, 500);
 

@@ -1,40 +1,18 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
-import { useFileSystemContext } from '../contexts';
-import { useExpandedNodes } from '../hooks';
+import { useFileSystemContext, TreeProvider } from '../contexts';
 import {
 	ErrorBoundary,
-	ConfirmationDialog,
 	EmptyState,
 	ErrorDisplay,
+	ControlButton,
 } from '../components';
 
 import { Controls, VirtualizedTree, Statistics } from './';
 
 // Main FileExplorer Container Component
 export const FileExplorer: React.FC = () => {
-	const { rootNode, error, resetFileSystem, createRoot } =
-		useFileSystemContext();
-	const { expandedNodes, toggleNode, expandAll, collapseAll } =
-		useExpandedNodes();
-
-	// State for confirmation dialog
-	const [showResetConfirmation, setShowResetConfirmation] =
-		React.useState(false);
-
-	const handleResetRequest = useCallback(() => {
-		setShowResetConfirmation(true);
-	}, []);
-
-	const handleConfirmReset = useCallback(() => {
-		resetFileSystem();
-		createRoot('Root');
-		setShowResetConfirmation(false);
-	}, [resetFileSystem, createRoot]);
-
-	const handleCancelReset = useCallback(() => {
-		setShowResetConfirmation(false);
-	}, []);
+	const { rootNode, error, createRoot } = useFileSystemContext();
 
 	return (
 		<div className="file-explorer p-5 font-sans max-w-6xl mx-auto">
@@ -43,38 +21,29 @@ export const FileExplorer: React.FC = () => {
 			</h1>
 
 			<ErrorDisplay error={error} />
-			<ErrorBoundary>
-				<Controls
-					expandedNodes={expandedNodes}
-					toggleNode={toggleNode}
-					expandAll={expandAll}
-					collapseAll={collapseAll}
-					onResetRequest={handleResetRequest}
-				/>
-			</ErrorBoundary>
-
-			<Statistics />
 
 			<ErrorBoundary>
-				{rootNode ? (
-					<VirtualizedTree
-						expandedNodes={expandedNodes}
-						toggleNode={toggleNode}
-					/>
+				{!rootNode ? (
+					<>
+						<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+							<ControlButton
+								onClick={() => createRoot('Root')}
+								variant="primary"
+								size="lg"
+							>
+								📁 Create Root Directory
+							</ControlButton>
+						</div>
+						<EmptyState />
+					</>
 				) : (
-					<EmptyState />
+					<TreeProvider>
+						<Controls />
+						<Statistics />
+						<VirtualizedTree />
+					</TreeProvider>
 				)}
 			</ErrorBoundary>
-
-			<ConfirmationDialog
-				isOpen={showResetConfirmation}
-				title="Reset File System"
-				message="Are you sure you want to reset the file system? This will delete all files and directories and create a new root node."
-				confirmText="Reset"
-				cancelText="Cancel"
-				onConfirm={handleConfirmReset}
-				onCancel={handleCancelReset}
-			/>
 		</div>
 	);
 };

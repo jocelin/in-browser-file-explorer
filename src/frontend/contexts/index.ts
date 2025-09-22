@@ -5,3 +5,4 @@
  */
 
 export * from './FileSystemContext';
+export * from './TreeContext';

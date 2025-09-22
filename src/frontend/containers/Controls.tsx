@@ -1,43 +1,33 @@
 import React, { useState, useCallback } from 'react';
-import { ControlButton } from '../components/ControlButton';
-import { SelectedNodeInfo } from '../components/SelectedNodeInfo';
-import { ConfirmationDialog } from '../components/ConfirmationDialog';
-import { CreateDialog } from '../components/CreateDialog';
-import { LoadingProgress } from '../components/LoadingProgress';
-import { useFileSystemContext } from '../contexts';
+import {
+	ControlButton,
+	SelectedNodeInfo,
+	ConfirmationDialog,
+	CreateDialog,
+	LoadingProgress,
+} from '../components';
+import { useFileSystemContext, useTreeContext } from '../contexts';
 import { useSampleDataGenerator } from '../hooks';
 
-interface ControlsProps {
-	expandedNodes: Set<string>;
-	toggleNode: (nodeId: string) => void;
-	expandAll: () => void;
-	collapseAll: () => void;
-	onResetRequest: () => void;
-}
+interface ControlsProps {}
 
-export const Controls: React.FC<ControlsProps> = ({
-	expandedNodes: _expandedNodes,
-	toggleNode: _toggleNode,
-	expandAll,
-	collapseAll,
-	onResetRequest,
-}) => {
+export const Controls: React.FC<ControlsProps> = () => {
 	const {
 		rootNode,
 		selectedNode = null,
 		createRoot,
 		createNode,
 		deleteNode,
+		allNodes,
+		resetFileSystem,
 	} = useFileSystemContext();
-
+	const { expandAll, collapseAll } = useTreeContext();
 	const { isLoading, progress, generateExampleData } =
 		useSampleDataGenerator(rootNode);
+
 	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 	const [showCreateDialog, setShowCreateDialog] = useState(false);
-
-	const handleDeleteClick = useCallback(() => {
-		setShowDeleteConfirmation(true);
-	}, []);
+	const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
 	const handleDeleteConfirm = useCallback(() => {
 		if (selectedNode) {
@@ -46,93 +36,67 @@ export const Controls: React.FC<ControlsProps> = ({
 		setShowDeleteConfirmation(false);
 	}, [selectedNode, deleteNode]);
 
-	const handleDeleteCancel = useCallback(() => {
-		setShowDeleteConfirmation(false);
-	}, []);
-
-	const handleCreateRoot = useCallback(() => {
+	const handleConfirmReset = useCallback(() => {
+		resetFileSystem();
 		createRoot('Root');
-	}, [createRoot]);
-
-	const handleExpandAll = useCallback(() => {
-		expandAll();
-	}, [expandAll]);
-
-	const handleCollapseAll = useCallback(() => {
-		collapseAll();
-	}, [collapseAll]);
-
-	const handleResetFileSystem = useCallback(() => {
-		onResetRequest();
-	}, [onResetRequest]);
-
-	const handleCreateNewItem = useCallback(() => {
-		setShowCreateDialog(true);
-	}, []);
-
-	const handleCloseCreateDialog = useCallback(() => {
-		setShowCreateDialog(false);
-	}, []);
-
-	const handleGenerateExampleData = useCallback(async () => {
-		generateExampleData();
-	}, [generateExampleData]);
+		setShowResetConfirmation(false);
+	}, [resetFileSystem, createRoot]);
 
 	return (
 		<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-			{rootNode && !selectedNode && (
-				<h3 className="p-2 text-gray-600 ">
-					Select Root to create new item, or generate 10K files to get started.
-				</h3>
-			)}
-
 			<div className="flex gap-3 flex-wrap items-center">
-				{!rootNode && (
-					<ControlButton onClick={handleCreateRoot} variant="primary" size="lg">
-						📁 Create Root Directory
-					</ControlButton>
-				)}
+				<ControlButton
+					disabled={!selectedNode || selectedNode.type !== 'directory'}
+					onClick={() => setShowCreateDialog(true)}
+					variant="primary"
+				>
+					➕ Create New Item
+				</ControlButton>
 
-				{rootNode && (
-					<>
-						<ControlButton
-							onClick={handleCreateNewItem}
-							disabled={!selectedNode || selectedNode.type !== 'directory'}
-							variant="primary"
-						>
-							➕ Create New Item
-						</ControlButton>
+				<ControlButton
+					disabled={
+						!selectedNode || !rootNode || selectedNode.id === rootNode.id
+					}
+					onClick={() => setShowDeleteConfirmation(true)}
+					variant="danger"
+				>
+					🗑️ Delete Selected
+				</ControlButton>
 
-						<ControlButton
-							onClick={handleDeleteClick}
-							disabled={!selectedNode || selectedNode.id === rootNode.id}
-							variant="danger"
-						>
-							🗑️ Delete Selected
-						</ControlButton>
+				<ControlButton onClick={expandAll} variant="secondary">
+					📂 Expand All
+				</ControlButton>
 
-						<ControlButton onClick={handleExpandAll} variant="secondary">
-							📂 Expand All
-						</ControlButton>
+				<ControlButton onClick={collapseAll} variant="secondary">
+					📁 Collapse All
+				</ControlButton>
 
-						<ControlButton onClick={handleCollapseAll} variant="secondary">
-							📁 Collapse All
-						</ControlButton>
+				<ControlButton onClick={generateExampleData} variant="ghost">
+					⚡ Generate 10K Files
+				</ControlButton>
 
-						<ControlButton onClick={handleGenerateExampleData} variant="ghost">
-							⚡ Generate 10K Files
-						</ControlButton>
-
-						<ControlButton onClick={handleResetFileSystem} variant="danger">
-							🔄 Reset File System
-						</ControlButton>
-					</>
-				)}
+				<ControlButton
+					disabled={allNodes.length === 1}
+					onClick={() => setShowResetConfirmation(true)}
+					variant="danger"
+				>
+					🔄 Reset File System
+				</ControlButton>
 			</div>
 			<SelectedNodeInfo selectedNode={selectedNode} />
 
-			<LoadingProgress isLoading={isLoading} progress={progress} />
+			<LoadingProgress
+				text="Generating Files..."
+				isLoading={isLoading}
+				progress={progress}
+			/>
 
+			<CreateDialog
+				isOpen={showCreateDialog}
+				onClose={() => setShowCreateDialog(false)}
+				selectedNode={selectedNode}
+				createNode={createNode}
+			/>
 			<ConfirmationDialog
 				isOpen={showDeleteConfirmation}
 				title="Delete Item"
@@ -140,14 +104,16 @@ export const Controls: React.FC<ControlsProps> = ({
 				confirmText="Delete"
 				cancelText="Cancel"
 				onConfirm={handleDeleteConfirm}
-				onCancel={handleDeleteCancel}
+				onCancel={() => setShowDeleteConfirmation(false)}
 			/>
-
-			<CreateDialog
-				isOpen={showCreateDialog}
-				onClose={handleCloseCreateDialog}
-				selectedNode={selectedNode}
-				createNode={createNode}
+			<ConfirmationDialog
+				isOpen={showResetConfirmation}
+				title="Reset File System"
+				message="Are you sure you want to reset the file system? This will delete all files and directories and create a new root node."
+				confirmText="Reset"
+				cancelText="Cancel"
+				onConfirm={handleConfirmReset}
+				onCancel={() => setShowResetConfirmation(false)}
 			/>
 		</div>
 	);

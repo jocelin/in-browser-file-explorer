@@ -1,5 +1,6 @@
 export * from './ControlButton';
 export * from './ConfirmationDialog';
+export * from './CreateDialog';
 export * from './EmptyState';
 export * from './ErrorDisplay';
 export * from './ErrorBoundary';
