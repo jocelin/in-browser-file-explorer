@@ -158,7 +158,7 @@ const createBasicStructure = async (
  * Provides a clean interface for generating example file system structures
  */
 export const useSampleDataGenerator = (root: FileSystemNode | null) => {
-	const { selectNode, createNode, setError, clearError } =
+	const { selectNode, createNode, setError, clearError, allNodes } =
 		useFileSystemContext();
 
 	const [isLoading, setIsLoading] = useState(false);
@@ -167,6 +167,14 @@ export const useSampleDataGenerator = (root: FileSystemNode | null) => {
 	const generateExampleData = useCallback(async () => {
 		if (!root) {
 			setError('No root node available');
+			return;
+		}
+
+		// Check if there's only a single root node
+		if (allNodes.length > 1) {
+			setError(
+				'Cannot generate example data when there are existing files or directories. Please reset the file system first.'
+			);
 			return;
 		}
 
@@ -187,7 +195,7 @@ export const useSampleDataGenerator = (root: FileSystemNode | null) => {
 			setIsLoading(false);
 			setProgress({ current: 0, total: 0 });
 		}
-	}, [root, selectNode, createNode, setError, clearError]);
+	}, [root, selectNode, createNode, setError, clearError, allNodes]);
 
 	return {
 		generateExampleData,

@@ -47,7 +47,9 @@ export const Controls: React.FC<ControlsProps> = () => {
 		<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
 			<div className="flex gap-3 flex-wrap items-center">
 				<ControlButton
-					disabled={!selectedNode || selectedNode.type !== 'directory'}
+					disabled={
+						isLoading || !selectedNode || selectedNode.type !== 'directory'
+					}
 					onClick={() => setShowCreateDialog(true)}
 					variant="primary"
 				>
@@ -56,7 +58,10 @@ export const Controls: React.FC<ControlsProps> = () => {
 
 				<ControlButton
 					disabled={
-						!selectedNode || !rootNode || selectedNode.id === rootNode.id
+						isLoading ||
+						!selectedNode ||
+						!rootNode ||
+						selectedNode.id === rootNode.id
 					}
 					onClick={() => setShowDeleteConfirmation(true)}
 					variant="danger"
@@ -64,20 +69,32 @@ export const Controls: React.FC<ControlsProps> = () => {
 					🗑️ Delete Selected
 				</ControlButton>
 
-				<ControlButton onClick={expandAll} variant="secondary">
+				<ControlButton
+					disabled={isLoading}
+					onClick={expandAll}
+					variant="secondary"
+				>
 					📂 Expand All
 				</ControlButton>
 
-				<ControlButton onClick={collapseAll} variant="secondary">
+				<ControlButton
+					disabled={isLoading}
+					onClick={collapseAll}
+					variant="secondary"
+				>
 					📁 Collapse All
 				</ControlButton>
 
-				<ControlButton onClick={generateExampleData} variant="ghost">
+				<ControlButton
+					disabled={isLoading}
+					onClick={generateExampleData}
+					variant="ghost"
+				>
 					⚡ Generate 10K Files
 				</ControlButton>
 
 				<ControlButton
-					disabled={allNodes.length === 1}
+					disabled={isLoading || allNodes.length === 1}
 					onClick={() => setShowResetConfirmation(true)}
 					variant="danger"
 				>

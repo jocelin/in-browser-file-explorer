@@ -28,7 +28,7 @@ const createInitialState = (): FileSystemState => ({
 });
 
 // Simplified context interface
-interface FileSystemContextValue {
+export interface FileSystemContextValue {
 	// State
 	error: string | null;
 	isLoading: boolean;
