@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
+
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -29,6 +30,10 @@ export default defineConfig({
 			{
 				find: '@file-explorer/types',
 				replacement: path.resolve(__dirname, './src/frontend/types'),
+			},
+			{
+				find: '@file-explorer/test',
+				replacement: path.resolve(__dirname, './src/test'),
 			},
 			{
 				find: '@file-explorer',

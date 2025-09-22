@@ -35,6 +35,16 @@ jest.mock('@file-explorer/types', () => ({
 
 describe('CreateDialog', () => {
 	const mockOnClose = jest.fn();
+	const mockCreateNode = jest.fn();
+	const mockSelectedNode = {
+		id: '1',
+		name: 'Test Directory',
+		type: 'directory' as const,
+		parentId: null as string | null,
+		children: [] as string[],
+		createdAt: new Date(),
+		modifiedAt: new Date(),
+	};
 
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -45,8 +55,8 @@ describe('CreateDialog', () => {
 			<CreateDialog
 				isOpen={true}
 				onClose={mockOnClose}
-				selectedNode={null}
-				createNode={jest.fn()}
+				selectedNode={mockSelectedNode}
+				createNode={mockCreateNode}
 			/>
 		);
 
@@ -60,8 +70,8 @@ describe('CreateDialog', () => {
 			<CreateDialog
 				isOpen={false}
 				onClose={mockOnClose}
-				selectedNode={null}
-				createNode={jest.fn()}
+				selectedNode={mockSelectedNode}
+				createNode={mockCreateNode}
 			/>
 		);
 
@@ -73,8 +83,8 @@ describe('CreateDialog', () => {
 			<CreateDialog
 				isOpen={true}
 				onClose={mockOnClose}
-				selectedNode={null}
-				createNode={jest.fn()}
+				selectedNode={mockSelectedNode}
+				createNode={mockCreateNode}
 			/>
 		);
 
@@ -87,8 +97,8 @@ describe('CreateDialog', () => {
 			<CreateDialog
 				isOpen={true}
 				onClose={mockOnClose}
-				selectedNode={null}
-				createNode={jest.fn()}
+				selectedNode={mockSelectedNode}
+				createNode={mockCreateNode}
 			/>
 		);
 
@@ -101,8 +111,8 @@ describe('CreateDialog', () => {
 			<CreateDialog
 				isOpen={true}
 				onClose={mockOnClose}
-				selectedNode={null}
-				createNode={jest.fn()}
+				selectedNode={mockSelectedNode}
+				createNode={mockCreateNode}
 			/>
 		);
 
@@ -116,8 +126,8 @@ describe('CreateDialog', () => {
 			<CreateDialog
 				isOpen={false}
 				onClose={mockOnClose}
-				selectedNode={null}
-				createNode={jest.fn()}
+				selectedNode={mockSelectedNode}
+				createNode={mockCreateNode}
 			/>
 		);
 
@@ -126,8 +136,8 @@ describe('CreateDialog', () => {
 			<CreateDialog
 				isOpen={true}
 				onClose={mockOnClose}
-				selectedNode={null}
-				createNode={jest.fn()}
+				selectedNode={mockSelectedNode}
+				createNode={mockCreateNode}
 			/>
 		);
 

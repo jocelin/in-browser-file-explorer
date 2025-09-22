@@ -33,20 +33,16 @@ export default {
 					},
 				],
 			},
-			moduleNameMapping: {
+			moduleNameMapper: {
+				'^@file-explorer/components(/.*)?$':
+					'<rootDir>/src/frontend/components$1',
+				'^@file-explorer/containers(/.*)?$':
+					'<rootDir>/src/frontend/containers$1',
+				'^@file-explorer/contexts(/.*)?$': '<rootDir>/src/frontend/contexts$1',
+				'^@file-explorer/hooks(/.*)?$': '<rootDir>/src/frontend/hooks$1',
+				'^@file-explorer/types(/.*)?$': '<rootDir>/src/frontend/types$1',
+				'^@file-explorer/test(/.*)?$': '<rootDir>/src/test$1',
 				'^@file-explorer/(.*)$': '<rootDir>/src/$1',
-				'^@file-explorer/components/(.*)$':
-					'<rootDir>/src/frontend/components/$1',
-				'^@file-explorer/containers/(.*)$':
-					'<rootDir>/src/frontend/containers/$1',
-				'^@file-explorer/contexts/(.*)$': '<rootDir>/src/frontend/contexts/$1',
-				'^@file-explorer/hooks/(.*)$': '<rootDir>/src/frontend/hooks/$1',
-				'^@file-explorer/types/(.*)$': '<rootDir>/src/frontend/types/$1',
-				'^@file-explorer/components$': '<rootDir>/src/frontend/components',
-				'^@file-explorer/containers$': '<rootDir>/src/frontend/containers',
-				'^@file-explorer/contexts$': '<rootDir>/src/frontend/contexts',
-				'^@file-explorer/hooks$': '<rootDir>/src/frontend/hooks',
-				'^@file-explorer/types$': '<rootDir>/src/frontend/types',
 			},
 		},
 	],

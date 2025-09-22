@@ -3,18 +3,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 
 import { Controls } from '@file-explorer/containers';
-
-// Mock contexts
-jest.mock('@file-explorer/contexts', () => ({
-	useFileSystemContext: (): any => ({
-		rootNode: null,
-		selectedNode: null,
-		createRoot: jest.fn(),
-		createNode: jest.fn(),
-		deleteNode: jest.fn(),
-		resetFileSystem: jest.fn(),
-	}),
-}));
+import { TestWrapper } from '@file-explorer/test';
 
 // Mock hooks
 jest.mock('@file-explorer/hooks', () => ({
@@ -59,29 +48,50 @@ describe('Controls', () => {
 		jest.clearAllMocks();
 	});
 
-	it('renders create root button when no root node exists', () => {
-		render(<Controls {...mockProps} />);
+	it('renders without crashing', () => {
+		render(
+			<TestWrapper>
+				<Controls {...mockProps} />
+			</TestWrapper>
+		);
 
-		expect(screen.getByText('📁 Create Root Directory')).toBeInTheDocument();
+		expect(screen.getAllByRole('button')).toHaveLength(6);
 	});
 
-	it('renders without crashing', () => {
-		render(<Controls {...mockProps} />);
+	it('renders all control buttons', () => {
+		render(
+			<TestWrapper>
+				<Controls {...mockProps} />
+			</TestWrapper>
+		);
 
-		expect(screen.getByRole('button')).toBeInTheDocument();
+		expect(screen.getByText('➕ Create New Item')).toBeInTheDocument();
+		expect(screen.getByText('🗑️ Delete Selected')).toBeInTheDocument();
+		expect(screen.getByText('📂 Expand All')).toBeInTheDocument();
+		expect(screen.getByText('📁 Collapse All')).toBeInTheDocument();
+		expect(screen.getByText('⚡ Generate 10K Files')).toBeInTheDocument();
+		expect(screen.getByText('🔄 Reset File System')).toBeInTheDocument();
 	});
 
 	it('shows selected node info when node is selected', () => {
-		render(<Controls {...mockProps} />);
+		render(
+			<TestWrapper>
+				<Controls {...mockProps} />
+			</TestWrapper>
+		);
 
 		// The SelectedNodeInfo component is always rendered but shows content conditionally
 		expect(screen.getByTestId('selected-node-info')).toBeInTheDocument();
 	});
 
 	it('renders all control components', () => {
-		render(<Controls {...mockProps} />);
+		render(
+			<TestWrapper>
+				<Controls {...mockProps} />
+			</TestWrapper>
+		);
 
 		// Test passes if component renders without errors
-		expect(screen.getByRole('button')).toBeInTheDocument();
+		expect(screen.getAllByRole('button')).toHaveLength(6);
 	});
 });

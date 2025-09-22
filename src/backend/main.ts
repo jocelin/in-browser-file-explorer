@@ -8,11 +8,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Simple endpoint that returns the current time
-app.get('/api/time', function (req, res) {
-	res.send(new Date().toISOString());
-});
-
 // Serve static files from the www directory
 // When running from dist/backend/main.ts, we need to go up one level to find www
 const staticPath = path.join(__dirname, '../www');

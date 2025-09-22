@@ -18,12 +18,13 @@
 		"types": ["jest", "node", "@testing-library/jest-dom"],
 		"baseUrl": "src",
 		"paths": {
-			"@file-explorer/*": ["*"],
+			"@file-explorer/*": ["frontend/*"],
 			"@file-explorer/components": ["frontend/components"],
 			"@file-explorer/containers": ["frontend/containers"],
 			"@file-explorer/contexts": ["frontend/contexts"],
 			"@file-explorer/hooks": ["frontend/hooks"],
-			"@file-explorer/types": ["frontend/types"]
+			"@file-explorer/types": ["frontend/types"],
+			"@file-explorer/test": ["test"]
 		}
 	},
 	"include": ["src/**/*"],
