@@ -1,14 +1,17 @@
 import React from 'react';
 
-import { useFileSystemContext, TreeProvider } from '../contexts';
 import {
 	ErrorBoundary,
 	EmptyState,
 	ErrorDisplay,
 	ControlButton,
-} from '../components';
-
-import { Controls, VirtualizedTree, Statistics } from './';
+} from '@file-explorer/components';
+import {
+	Controls,
+	VirtualizedTree,
+	Statistics,
+} from '@file-explorer/containers';
+import { useFileSystemContext, TreeProvider } from '@file-explorer/contexts';
 
 // Main FileExplorer Container Component
 export const FileExplorer: React.FC = () => {

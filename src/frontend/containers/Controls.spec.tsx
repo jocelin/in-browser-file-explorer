@@ -1,10 +1,11 @@
 import React from 'react';
+
 import { render, screen } from '@testing-library/react';
 
-import { Controls } from './Controls';
+import { Controls } from '@file-explorer/containers';
 
-// Mock the context
-jest.mock('../contexts', () => ({
+// Mock contexts
+jest.mock('@file-explorer/contexts', () => ({
 	useFileSystemContext: (): any => ({
 		rootNode: null,
 		selectedNode: null,
@@ -15,8 +16,8 @@ jest.mock('../contexts', () => ({
 	}),
 }));
 
-// Mock the hooks
-jest.mock('../hooks', () => ({
+// Mock hooks
+jest.mock('@file-explorer/hooks', () => ({
 	useSampleDataGenerator: () => ({
 		isLoading: false,
 		progress: { current: 0, total: 0 },
@@ -24,25 +25,16 @@ jest.mock('../hooks', () => ({
 	}),
 }));
 
-// Simple mocks
-jest.mock('../components/ControlButton', () => ({
+// Mock components
+jest.mock('@file-explorer/components', () => ({
 	ControlButton: ({ children, onClick, disabled }: any) => (
 		<button onClick={onClick} disabled={disabled}>
 			{children}
 		</button>
 	),
-}));
-
-jest.mock('../components/SelectedNodeInfo', () => ({
 	SelectedNodeInfo: () => <div data-testid="selected-node-info" />,
-}));
-
-jest.mock('../components/CreateDialog', () => ({
 	CreateDialog: ({ isOpen }: any) =>
 		isOpen ? <div data-testid="create-dialog">Create Dialog</div> : null,
-}));
-
-jest.mock('../components/ConfirmationDialog', () => ({
 	ConfirmationDialog: ({ isOpen, title, message, onConfirm, onCancel }: any) =>
 		isOpen ? (
 			<div data-testid="confirmation-dialog">
@@ -52,12 +44,12 @@ jest.mock('../components/ConfirmationDialog', () => ({
 				<button onClick={onCancel}>Cancel</button>
 			</div>
 		) : null,
+	LoadingProgress: ({ isLoading, progress }: any) =>
+		isLoading ? <div data-testid="loading-progress">{progress}</div> : null,
 }));
 
 describe('Controls', () => {
 	const mockProps = {
-		expandedNodes: new Set<string>(),
-		toggleNode: jest.fn(),
 		expandAll: jest.fn(),
 		collapseAll: jest.fn(),
 		onResetRequest: jest.fn(),
@@ -76,7 +68,6 @@ describe('Controls', () => {
 	it('renders without crashing', () => {
 		render(<Controls {...mockProps} />);
 
-		// Basic test to ensure component renders without errors
 		expect(screen.getByRole('button')).toBeInTheDocument();
 	});
 

@@ -1,7 +1,11 @@
 import React, { FC, useEffect } from 'react';
-import { FileSystemProvider, useFileSystemContext } from './contexts';
-import { ErrorBoundary } from './components';
-import { FileExplorer } from './containers';
+
+import { ErrorBoundary } from '@file-explorer/components';
+import { FileExplorer } from '@file-explorer/containers';
+import {
+	FileSystemProvider,
+	useFileSystemContext,
+} from '@file-explorer/contexts';
 
 interface AppProps {
 	name: string;

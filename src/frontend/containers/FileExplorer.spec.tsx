@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import { FileExplorer } from './FileExplorer';
+import { FileExplorer } from '@file-explorer/containers';
 
 // Mock the FileSystemService
 const mockFileSystem = {
@@ -23,12 +24,12 @@ const mockFileSystem = {
 	clearError: jest.fn(),
 };
 
-jest.mock('../contexts', () => ({
+jest.mock('@file-explorer/contexts', () => ({
 	useFileSystemContext: () => mockFileSystem,
 }));
 
 // Mock components with minimal implementation
-jest.mock('../components', () => ({
+jest.mock('@file-explorer/components', () => ({
 	Controls: ({
 		onCreateRoot,
 		onGenerateExampleData,
@@ -112,7 +113,7 @@ jest.mock('../components', () => ({
 	),
 }));
 
-jest.mock('./VirtualizedTree', () => ({
+jest.mock('@file-explorer/containers', () => ({
 	VirtualizedTree: ({ onNodeSelect, onNodeToggle }: any) => (
 		<div data-testid="tree">
 			<button onClick={() => onNodeSelect('node1')} data-testid="select-node">

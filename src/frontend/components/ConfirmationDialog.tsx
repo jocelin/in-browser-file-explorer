@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ButtonClass } from '../types';
+import { ButtonClass } from '@file-explorer/types';
 
 interface ConfirmationDialogProps {
 	isOpen: boolean;

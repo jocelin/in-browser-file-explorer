@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { render, screen } from '@testing-library/react';
 
-import { ErrorDisplay } from './ErrorDisplay';
+import { ErrorDisplay } from '@file-explorer/components';
 
 describe('ErrorDisplay', () => {
 	it('renders nothing when error is null', () => {

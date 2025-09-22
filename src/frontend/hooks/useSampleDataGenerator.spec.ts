@@ -1,8 +1,9 @@
 import { renderHook, act } from '@testing-library/react';
-import { useSampleDataGenerator } from './useSampleDataGenerator';
+
+import { useSampleDataGenerator } from '@file-explorer/hooks';
 
 // Mock the useFileSystemContext hook
-jest.mock('../contexts', () => ({
+jest.mock('@file-explorer/contexts', () => ({
 	useFileSystemContext: () => ({
 		resetFileSystem: jest.fn(),
 		createRoot: jest.fn().mockReturnValue({

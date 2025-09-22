@@ -1,10 +1,11 @@
 import React from 'react';
+
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import { CreateDialog } from './CreateDialog';
+import { CreateDialog } from '@file-explorer/components';
 
 // Mock the context
-jest.mock('../contexts', () => ({
+jest.mock('@file-explorer/contexts', () => ({
 	useFileSystemContext: (): any => ({
 		selectedNode: {
 			id: '1',
@@ -20,7 +21,7 @@ jest.mock('../contexts', () => ({
 }));
 
 // Mock the types
-jest.mock('../types', () => ({
+jest.mock('@file-explorer/types', () => ({
 	ButtonClass: {
 		size: {
 			md: 'px-4 py-2',
@@ -40,7 +41,14 @@ describe('CreateDialog', () => {
 	});
 
 	it('renders dialog when open', () => {
-		render(<CreateDialog isOpen={true} onClose={mockOnClose} />);
+		render(
+			<CreateDialog
+				isOpen={true}
+				onClose={mockOnClose}
+				selectedNode={null}
+				createNode={jest.fn()}
+			/>
+		);
 
 		expect(screen.getByText('Create New Item')).toBeInTheDocument();
 		expect(screen.getByText('Type:')).toBeInTheDocument();
@@ -48,27 +56,55 @@ describe('CreateDialog', () => {
 	});
 
 	it('does not render when closed', () => {
-		render(<CreateDialog isOpen={false} onClose={mockOnClose} />);
+		render(
+			<CreateDialog
+				isOpen={false}
+				onClose={mockOnClose}
+				selectedNode={null}
+				createNode={jest.fn()}
+			/>
+		);
 
 		expect(screen.queryByText('Create New Item')).not.toBeInTheDocument();
 	});
 
 	it('renders file and directory radio buttons', () => {
-		render(<CreateDialog isOpen={true} onClose={mockOnClose} />);
+		render(
+			<CreateDialog
+				isOpen={true}
+				onClose={mockOnClose}
+				selectedNode={null}
+				createNode={jest.fn()}
+			/>
+		);
 
 		expect(screen.getByLabelText('File')).toBeInTheDocument();
 		expect(screen.getByLabelText('Directory')).toBeInTheDocument();
 	});
 
 	it('renders cancel and create buttons', () => {
-		render(<CreateDialog isOpen={true} onClose={mockOnClose} />);
+		render(
+			<CreateDialog
+				isOpen={true}
+				onClose={mockOnClose}
+				selectedNode={null}
+				createNode={jest.fn()}
+			/>
+		);
 
 		expect(screen.getByText('Cancel')).toBeInTheDocument();
 		expect(screen.getByText('Create')).toBeInTheDocument();
 	});
 
 	it('calls onClose when cancel button is clicked', () => {
-		render(<CreateDialog isOpen={true} onClose={mockOnClose} />);
+		render(
+			<CreateDialog
+				isOpen={true}
+				onClose={mockOnClose}
+				selectedNode={null}
+				createNode={jest.fn()}
+			/>
+		);
 
 		fireEvent.click(screen.getByText('Cancel'));
 
@@ -77,11 +113,23 @@ describe('CreateDialog', () => {
 
 	it('resets form when dialog opens', () => {
 		const { rerender } = render(
-			<CreateDialog isOpen={false} onClose={mockOnClose} />
+			<CreateDialog
+				isOpen={false}
+				onClose={mockOnClose}
+				selectedNode={null}
+				createNode={jest.fn()}
+			/>
 		);
 
 		// Open dialog
-		rerender(<CreateDialog isOpen={true} onClose={mockOnClose} />);
+		rerender(
+			<CreateDialog
+				isOpen={true}
+				onClose={mockOnClose}
+				selectedNode={null}
+				createNode={jest.fn()}
+			/>
+		);
 
 		// Check that form is reset (file type selected by default)
 		expect(screen.getByLabelText('File')).toBeChecked();

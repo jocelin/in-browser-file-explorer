@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
-import { useFileSystemContext } from '../contexts';
-import { FileSystemNode, NodeType } from '../types';
+
+import { useFileSystemContext } from '@file-explorer/contexts';
+import { FileSystemNode, NodeType } from '@file-explorer/types';
 
 // Type for createNode function
 type CreateNodeFunction = (node: {

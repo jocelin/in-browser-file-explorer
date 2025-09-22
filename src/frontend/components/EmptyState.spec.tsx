@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { render, screen } from '@testing-library/react';
 
-import { EmptyState } from './EmptyState';
+import { EmptyState } from '@file-explorer/components';
 
 describe('EmptyState', () => {
 	it('renders empty state message', () => {

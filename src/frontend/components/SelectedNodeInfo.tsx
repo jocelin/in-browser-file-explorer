@@ -1,5 +1,6 @@
 import React from 'react';
-import { FileSystemNode } from '../types';
+
+import { FileSystemNode } from '@file-explorer/types';
 
 interface SelectedNodeInfoProps {
 	selectedNode: FileSystemNode | null;

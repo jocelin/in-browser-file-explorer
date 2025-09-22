@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import { ControlButton } from './ControlButton';
+import { ControlButton } from '@file-explorer/components';
 
 describe('ControlButton', () => {
 	const mockOnClick = jest.fn();

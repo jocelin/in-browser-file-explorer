@@ -1,6 +1,7 @@
 import React from 'react';
-import { useFileSystemContext } from '../contexts';
-import { useStatistics } from '../hooks';
+
+import { useFileSystemContext } from '@file-explorer/contexts';
+import { useStatistics } from '@file-explorer/hooks';
 
 interface StatCardProps {
 	icon?: string;

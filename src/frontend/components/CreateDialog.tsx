@@ -1,11 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react';
+
+import { SelectedNodeInfo } from '@file-explorer/components';
 import {
 	ButtonClass,
 	CreateNodeRequest,
 	FileSystemNode,
 	NodeType,
-} from '../types';
-import { SelectedNodeInfo } from './SelectedNodeInfo';
+} from '@file-explorer/types';
 
 interface CreateDialogProps {
 	isOpen: boolean;

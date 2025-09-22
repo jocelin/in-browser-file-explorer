@@ -15,8 +15,17 @@
 		"rootDir": "src",
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"types": ["jest", "node", "@testing-library/jest-dom"]
+		"types": ["jest", "node", "@testing-library/jest-dom"],
+		"baseUrl": "src",
+		"paths": {
+			"@file-explorer/*": ["*"],
+			"@file-explorer/components": ["frontend/components"],
+			"@file-explorer/containers": ["frontend/containers"],
+			"@file-explorer/contexts": ["frontend/contexts"],
+			"@file-explorer/hooks": ["frontend/hooks"],
+			"@file-explorer/types": ["frontend/types"]
+		}
 	},
-	"include": ["src/backend/**/*"],
-	"exclude": ["node_modules", "src/frontend", "src/test/setupTests.ts"]
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "src/test/setupTests.ts"]
 }

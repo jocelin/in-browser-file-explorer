@@ -1,13 +1,14 @@
 import React, { useState, useCallback } from 'react';
+
 import {
 	ControlButton,
 	SelectedNodeInfo,
 	ConfirmationDialog,
 	CreateDialog,
 	LoadingProgress,
-} from '../components';
-import { useFileSystemContext, useTreeContext } from '../contexts';
-import { useSampleDataGenerator } from '../hooks';
+} from '@file-explorer/components';
+import { useFileSystemContext, useTreeContext } from '@file-explorer/contexts';
+import { useSampleDataGenerator } from '@file-explorer/hooks';
 
 interface ControlsProps {}
 

@@ -1,8 +1,9 @@
 import React from 'react';
+
 import { render, screen } from '@testing-library/react';
 
-import { SelectedNodeInfo } from './SelectedNodeInfo';
-import { FileSystemNode } from '../types';
+import { SelectedNodeInfo } from '@file-explorer/components';
+import { FileSystemNode } from '@file-explorer/types';
 
 const mockDirectoryNode: FileSystemNode = {
 	id: '1',

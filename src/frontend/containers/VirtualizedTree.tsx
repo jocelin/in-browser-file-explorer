@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
-import { useFileSystemContext, useTreeContext } from '../contexts';
-import { useVirtualizedTree } from '../hooks';
+
+import { useFileSystemContext, useTreeContext } from '@file-explorer/contexts';
+import { useVirtualizedTree } from '@file-explorer/hooks';
 
 interface VirtualizedTreeProps {}
 

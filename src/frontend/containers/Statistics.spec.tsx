@@ -1,11 +1,12 @@
 import React from 'react';
+
 import { render, screen } from '@testing-library/react';
 
-import { Statistics } from './Statistics';
+import { Statistics } from '@file-explorer/containers';
 
 // Mock the context
-jest.mock('../contexts', () => ({
-	useFileSystemContext: () => ({
+jest.mock('@file-explorer/contexts', () => ({
+	useFileSystemContext: (): any => ({
 		rootNode: {
 			id: '1',
 			name: 'Root',
@@ -19,7 +20,7 @@ jest.mock('../contexts', () => ({
 }));
 
 // Mock the hooks
-jest.mock('../hooks', () => ({
+jest.mock('@file-explorer/hooks', () => ({
 	useStatistics: () => ({
 		nodeCount: 100,
 		directoryCount: 25,
@@ -39,8 +40,8 @@ describe('Statistics', () => {
 
 	it('renders nothing when no root node exists', () => {
 		// Mock context to return null rootNode
-		jest.doMock('../contexts', () => ({
-			useFileSystemContext: () => ({
+		jest.doMock('@file-explorer/contexts', () => ({
+			useFileSystemContext: (): any => ({
 				rootNode: null,
 			}),
 		}));

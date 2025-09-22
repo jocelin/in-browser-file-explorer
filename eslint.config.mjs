@@ -3,6 +3,9 @@ import typescript from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
+import importPlugin from 'eslint-plugin-import';
+import prettier from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 import globals from 'globals';
 
 export default [
@@ -28,6 +31,8 @@ export default [
 			'@typescript-eslint': typescript,
 			react: react,
 			'react-hooks': reactHooks,
+			import: importPlugin,
+			prettier: prettier,
 		},
 		rules: {
 			// Apply recommended rules from plugins
@@ -56,6 +61,49 @@ export default [
 			'no-debugger': 'warn',
 			'prefer-const': 'error',
 			'no-var': 'error',
+
+			// Import ordering rules
+			'import/order': [
+				'error',
+				{
+					groups: [
+						'builtin', // Node.js built-in modules
+						'external', // npm packages
+						'internal', // Internal modules (your aliases)
+						'parent', // Parent directory imports
+						'sibling', // Same directory imports
+						'index', // Index file imports
+					],
+					'newlines-between': 'always',
+					alphabetize: {
+						order: 'asc',
+						caseInsensitive: true,
+					},
+					pathGroups: [
+						{
+							pattern: 'react',
+							group: 'external',
+							position: 'before',
+						},
+						{
+							pattern: 'react-dom',
+							group: 'external',
+							position: 'before',
+						},
+						{
+							pattern: '@file-explorer/**',
+							group: 'internal',
+							position: 'before',
+						},
+					],
+					pathGroupsExcludedImportTypes: ['react', 'react-dom'],
+				},
+			],
+			'import/no-duplicates': 'error',
+			'import/no-unresolved': 'off', // TypeScript handles this
+
+			// Prettier integration
+			'prettier/prettier': 'error',
 		},
 		settings: {
 			react: {
@@ -83,4 +131,6 @@ export default [
 	{
 		ignores: ['dist/', 'node_modules/', '*.js', '*.d.ts'],
 	},
+	// Disable ESLint rules that conflict with Prettier
+	prettierConfig,
 ];

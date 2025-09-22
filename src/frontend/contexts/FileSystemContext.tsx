@@ -6,7 +6,12 @@ import React, {
 	useMemo,
 	ReactNode,
 } from 'react';
-import { CreateNodeRequest, FileSystemNode, FileSystemError } from '../types';
+
+import {
+	CreateNodeRequest,
+	FileSystemNode,
+	FileSystemError,
+} from '@file-explorer/types';
 
 // Core file system state type
 interface FileSystemState {

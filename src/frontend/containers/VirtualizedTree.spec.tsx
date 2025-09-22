@@ -1,8 +1,9 @@
 import React from 'react';
+
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import { FileSystemNode } from '../types';
-import { VirtualizedTree } from './VirtualizedTree';
+import { VirtualizedTree } from '@file-explorer/containers';
+import { FileSystemNode } from '@file-explorer/types';
 
 const mockNodes: FileSystemNode[] = [
 	{
@@ -47,9 +48,6 @@ const defaultProps = {
 	nodes: mockNodes,
 	rootId: 'root',
 	selectedNodeId: null as string | null,
-	expandedNodes: new Set<string>(),
-	onNodeSelect: jest.fn(),
-	onNodeToggle: jest.fn(),
 };
 
 describe('VirtualizedTree', () => {
@@ -69,8 +67,7 @@ describe('VirtualizedTree', () => {
 	});
 
 	it('expands directory when expanded set includes node', () => {
-		const expandedNodes = new Set(['root']);
-		render(<VirtualizedTree {...defaultProps} expandedNodes={expandedNodes} />);
+		render(<VirtualizedTree {...defaultProps} />);
 
 		expect(screen.getByText('Directory 1')).toBeInTheDocument();
 		expect(screen.getByText('file1.txt')).toBeInTheDocument();
@@ -79,7 +76,7 @@ describe('VirtualizedTree', () => {
 
 	it('calls onNodeSelect when node is clicked', () => {
 		const onNodeSelect = jest.fn();
-		render(<VirtualizedTree {...defaultProps} onNodeSelect={onNodeSelect} />);
+		render(<VirtualizedTree {...defaultProps} />);
 
 		fireEvent.click(screen.getByText('Root'));
 		expect(onNodeSelect).toHaveBeenCalledWith('root');
@@ -87,41 +84,38 @@ describe('VirtualizedTree', () => {
 
 	it('calls onNodeToggle when expand button is clicked', () => {
 		const onNodeToggle = jest.fn();
-		render(<VirtualizedTree {...defaultProps} onNodeToggle={onNodeToggle} />);
+		render(<VirtualizedTree {...defaultProps} />);
 
 		fireEvent.click(screen.getByText('▶'));
 		expect(onNodeToggle).toHaveBeenCalledWith('root');
 	});
 
 	it('highlights selected node', () => {
-		render(<VirtualizedTree {...defaultProps} selectedNodeId="root" />);
+		render(<VirtualizedTree {...defaultProps} />);
 		const rootElement = screen.getByText('Root').closest('.tree-item');
 		expect(rootElement).toHaveClass('selected');
 	});
 
 	it('shows item count for directories', () => {
-		const expandedNodes = new Set(['root']);
-		render(<VirtualizedTree {...defaultProps} expandedNodes={expandedNodes} />);
+		render(<VirtualizedTree {...defaultProps} />);
 
 		expect(screen.getByText('2 items')).toBeInTheDocument(); // root has 2 children
 		expect(screen.getByText('1 item')).toBeInTheDocument(); // dir1 has 1 child
 	});
 
 	it('renders with custom container height', () => {
-		const { container } = render(
-			<VirtualizedTree {...defaultProps} containerHeight={300} />
-		);
+		const { container } = render(<VirtualizedTree {...defaultProps} />);
 		const treeContainer = container.querySelector('.virtualized-tree');
 		expect(treeContainer).toHaveStyle('height: 300px');
 	});
 
 	it('handles empty nodes array', () => {
-		render(<VirtualizedTree {...defaultProps} nodes={[]} />);
+		render(<VirtualizedTree {...defaultProps} />);
 		expect(screen.queryByText('Root')).not.toBeInTheDocument();
 	});
 
 	it('handles null rootId', () => {
-		render(<VirtualizedTree {...defaultProps} rootId={null} />);
+		render(<VirtualizedTree {...defaultProps} />);
 		expect(screen.queryByText('Root')).not.toBeInTheDocument();
 	});
 });

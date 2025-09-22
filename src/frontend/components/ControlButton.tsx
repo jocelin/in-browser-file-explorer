@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ButtonClass, ButtonSize, ButtonVariant } from '../types';
+import { ButtonClass, ButtonSize, ButtonVariant } from '@file-explorer/types';
 
 interface ControlButtonProps extends React.ComponentProps<'button'> {
 	onClick: () => void;

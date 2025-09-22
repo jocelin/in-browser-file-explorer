@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { useFileSystemContext } from './FileSystemContext';
+
+import { useFileSystemContext } from '@file-explorer/contexts';
 
 interface TreeContextValue {
 	expandedNodes: Set<string>;

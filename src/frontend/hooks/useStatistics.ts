@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { useFileSystemContext } from '../contexts';
-import { FileSystemNode } from '../types';
+
+import { useFileSystemContext } from '@file-explorer/contexts';
+import { FileSystemNode } from '@file-explorer/types';
 
 // Get node statistics
 const getStatistics = (nodes: FileSystemNode[]) => {

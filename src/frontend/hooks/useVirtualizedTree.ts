@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { FileSystemNode } from '../types';
+
+import { FileSystemNode } from '@file-explorer/types';
 
 // Debounce function
 const debounce = <T extends (...args: never[]) => unknown>(
