@@ -6,3 +6,4 @@ export * from './ErrorDisplay';
 export * from './ErrorBoundary';
 export * from './LoadingProgress';
 export * from './SelectedNodeInfo';
+export * from './TreeItem';
