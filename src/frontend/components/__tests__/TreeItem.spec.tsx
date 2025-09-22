@@ -269,11 +269,13 @@ describe('TreeItem', () => {
 			'right-0',
 			'flex',
 			'items-center',
-			'cursor-pointer',
+			'cursor-grab',
+			'active:cursor-grabbing',
 			'border-b',
 			'border-gray-100',
 			'text-sm',
-			'select-none'
+			'select-none',
+			'group'
 		);
 
 		// Check icon classes
@@ -324,7 +326,7 @@ describe('TreeItem', () => {
 			/>
 		);
 
-		const spacer = document.querySelector('.w-7.mr-2');
+		const spacer = document.querySelector('.w-6.mr-1');
 		expect(spacer).toBeInTheDocument();
 	});
 

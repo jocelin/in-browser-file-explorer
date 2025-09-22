@@ -38,6 +38,7 @@ export interface FileSystemContextValue {
 	selectNode: (nodeId: string) => void;
 	createNode: (request: CreateNodeRequest) => FileSystemNode | null;
 	deleteNode: (nodeId: string) => void;
+	moveNode: (nodeId: string, newParentId: string) => void;
 	createRoot: (name?: string) => FileSystemNode | null;
 	resetFileSystem: () => void;
 	setError: (error: string | null) => void;
@@ -227,6 +228,103 @@ export const FileSystemProvider: React.FC<FileSystemProviderProps> = ({
 		[state.nodes, state.rootId, createError, executeOperation]
 	);
 
+	const moveNode = useCallback(
+		(nodeId: string, newParentId: string): void => {
+			executeOperation(() => {
+				const node = state.nodes.get(nodeId);
+				if (!node) {
+					throw createError(
+						'NODE_NOT_FOUND',
+						`Node with id ${nodeId} not found`
+					);
+				}
+
+				const newParent = state.nodes.get(newParentId);
+				if (!newParent) {
+					throw createError(
+						'NODE_NOT_FOUND',
+						`Target parent node with id ${newParentId} not found`
+					);
+				}
+
+				if (newParent.type !== 'directory') {
+					throw createError(
+						'INVALID_PARENT',
+						'Cannot move node into a file - target must be a directory'
+					);
+				}
+
+				// Prevent moving a node into itself or its descendants
+				const isDescendant = (parentId: string, childId: string): boolean => {
+					const parent = state.nodes.get(parentId);
+					if (!parent) return false;
+
+					if (parent.children.includes(childId)) return true;
+
+					return parent.children.some(childChildId =>
+						isDescendant(childChildId, childId)
+					);
+				};
+
+				if (isDescendant(nodeId, newParentId)) {
+					throw createError(
+						'INVALID_PARENT',
+						'Cannot move a directory into itself or its descendants'
+					);
+				}
+
+				// Check for duplicate names in the target directory
+				const existingChild = newParent.children.find(childId => {
+					const child = state.nodes.get(childId);
+					return child && child.name === node.name;
+				});
+
+				if (existingChild) {
+					throw createError(
+						'DUPLICATE_NAME',
+						`A ${node.type} with the name "${node.name}" already exists in the target directory`
+					);
+				}
+
+				setState(prev => {
+					const newNodes = new Map(prev.nodes);
+					const now = new Date();
+
+					// Remove from old parent
+					if (node.parentId) {
+						const oldParent = newNodes.get(node.parentId);
+						if (oldParent) {
+							oldParent.children = oldParent.children.filter(
+								childId => childId !== nodeId
+							);
+							oldParent.modifiedAt = now;
+						}
+					}
+
+					// Add to new parent
+					const updatedNewParent = newNodes.get(newParentId);
+					if (updatedNewParent) {
+						updatedNewParent.children.push(nodeId);
+						updatedNewParent.modifiedAt = now;
+					}
+
+					// Update the moved node
+					const updatedNode = newNodes.get(nodeId);
+					if (updatedNode) {
+						updatedNode.parentId = newParentId;
+						updatedNode.modifiedAt = now;
+					}
+
+					return {
+						...prev,
+						nodes: newNodes,
+					};
+				});
+			});
+		},
+		[state.nodes, createError, executeOperation]
+	);
+
 	const resetFileSystem = useCallback((): void => {
 		setState(createInitialState());
 		setError(null);
@@ -324,6 +422,7 @@ export const FileSystemProvider: React.FC<FileSystemProviderProps> = ({
 		selectNode,
 		createNode,
 		deleteNode,
+		moveNode,
 		createRoot,
 		resetFileSystem,
 		setError,

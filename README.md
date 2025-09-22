@@ -1,48 +1,27 @@
 # In-Browser File Explorer
 
-A modern full-stack TypeScript application with Express backend and React frontend, featuring hot reload and comprehensive testing.
+A fully functional, frontend-only file explorer built with React and TypeScript. This application provides a virtualized tree view with drag and drop functionality that can efficiently handle large file systems with thousands of files, featuring modern UI design and comprehensive testing.
 
-See also [FILE_EXPLORER_README](./docs/FILE_EXPLORER_README.md) for details.
+> **📖 For detailed application features and usage instructions, see [FILE_EXPLORER_README](./docs/FILE_EXPLORER_README.md)**
 
-## Features
+## Quick Start
 
-- **Full-stack TypeScript** with Express backend and React frontend
-- **Hot reload for both frontend and backend** with a single command
-- **Modern tooling**: Vite for frontend, nodemon for backend
-- **Comprehensive testing** with Jest
-- **Zero-config development** - just run `yarn dev`
-- **Production-ready** build system
-- **Code quality**: ESLint and Prettier for consistent code formatting and linting
+```bash
+# Clone and install
+git clone <repository-url>
+cd in-browser-file-explorer
+yarn install
 
-## Project Structure
-
+# Start development server
+yarn dev
 ```
-├── src/
-│   ├── frontend/         # React frontend code
-│   ├── backend/          # Express backend code
-│   └── test/             # Jest test setup
-├── index.html            # Frontend HTML template
-├── vite.config.ts        # Vite configuration
-├── jest.config.js        # Jest configuration
-├── nodemon.json          # Nodemon configuration
-└── tsconfig.json         # TypeScript configuration
-```
+
+Open http://localhost:3000 in your browser.
 
 ## Prerequisites
 
-- **Node.js** >= 18.0.0
-- **Yarn** >= 1.22.0
-
-## Installation
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd in-browser-file-explorer
-
-# Install dependencies
-yarn install
-```
+- **Node.js** >= 10.18.0
+- **Yarn** >= 1.10.1
 
 ## Development
 
@@ -126,34 +105,61 @@ yarn clean
 yarn clean:all
 ```
 
+## Project Structure
+
+```
+├── src/
+│   ├── frontend/         # React frontend code
+│   │   ├── components/   # Reusable UI components
+│   │   ├── containers/   # Main application containers
+│   │   ├── contexts/     # React context providers
+│   │   ├── hooks/        # Custom React hooks
+│   │   ├── types/        # TypeScript type definitions
+│   │   ├── App.tsx       # Main application component
+│   │   ├── main.tsx      # Application entry point
+│   │   └── index.css     # Tailwind CSS styles
+│   ├── backend/          # Express backend code
+│   └── test/             # Jest test setup and utilities
+├── docs/                 # Project documentation
+├── dist/                 # Build output directory
+├── coverage/             # Test coverage reports
+├── index.html            # Frontend HTML template
+├── vite.config.ts        # Vite configuration
+├── jest.config.js        # Jest configuration
+├── nodemon.json          # Nodemon configuration
+├── tsconfig.json         # TypeScript configuration
+└── eslint.config.mjs     # ESLint configuration
+```
+
 ## Technology Stack
 
 ### Frontend
 
 - **React 18** - UI library
-- **TypeScript** - Type safety
+- **TypeScript 5** - Type safety
 - **Vite** - Build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **@dnd-kit** - Drag and drop functionality
 
 ### Backend
 
-- **Express** - Web framework
+- **Express** - Web framework for serving static files
 - **TypeScript** - Type safety
 - **Nodemon** - Development server
 
 ### Testing
 
 - **Jest** - Test framework
+- **React Testing Library** - React component testing
 - **ts-jest** - TypeScript support for Jest
+- **@testing-library/jest-dom** - Custom Jest matchers
 
 ### Development Tools
 
-- **ESLint** - Code linting
+- **ESLint** - Code linting with TypeScript support
 - **Prettier** - Code formatting
 - **Concurrently** - Run multiple commands
-
-## API Endpoints
-
-- `GET /api/time` - Returns current server time
+- **tsx** - TypeScript execution for development
 
 ## Contributing
 

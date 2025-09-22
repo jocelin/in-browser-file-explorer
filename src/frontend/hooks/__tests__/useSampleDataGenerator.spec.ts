@@ -24,6 +24,7 @@ describe('useSampleDataGenerator', () => {
 			selectNode: mockSelectNode,
 			createNode: mockCreateNode,
 			deleteNode: jest.fn(),
+			moveNode: jest.fn(),
 			createRoot: jest.fn().mockReturnValue({
 				id: 'root-id',
 				name: 'Root',
@@ -128,6 +129,7 @@ describe('useSampleDataGenerator', () => {
 			selectNode: mockSelectNode,
 			createNode: mockCreateNode,
 			deleteNode: jest.fn(),
+			moveNode: jest.fn(),
 			createRoot: jest.fn(),
 			resetFileSystem: jest.fn(),
 			setError: mockSetError,
