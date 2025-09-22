@@ -41,9 +41,12 @@ describe('SelectedNodeInfo', () => {
 		expect(screen.getByText('📄 Test File')).toBeInTheDocument();
 	});
 
-	it('renders nothing when no node is selected', () => {
-		const { container } = render(<SelectedNodeInfo selectedNode={null} />);
-		expect(container.firstChild).toBeNull();
+	it('renders instruction message when no node is selected', () => {
+		render(<SelectedNodeInfo selectedNode={null} />);
+		expect(
+			screen.getByText(/Select "Root" to "Create New Item"/)
+		).toBeInTheDocument();
+		expect(screen.getByText(/Generate 10K Files/)).toBeInTheDocument();
 	});
 
 	it('renders root node name when name is empty', () => {
