@@ -97,10 +97,41 @@ The In-Browser File Explorer is a fully functional, frontend-only file explorer 
 - **TreeContext**: Manages tree expansion/collapse state and navigation
 - **VirtualizedTree**: Performance-optimized tree component with drag and drop support
 - **FileExplorer**: Main UI container orchestrating all functionality
+- **ErrorBoundary**: Multi-level error boundary system for graceful failure handling
 - **Custom Hooks**: Specialized hooks for statistics, sample data generation, and virtualization
 - **DnD Kit**: Drag and drop functionality using @dnd-kit/core
 - **TypeScript**: Full type safety throughout the application
 - **Tailwind CSS**: Utility-first CSS framework with Vite plugin integration
+
+### Module System & Import Organization
+
+- **Path Aliases**: Uses @file-explorer/\* aliases for clean, maintainable imports
+  - `@file-explorer/components` - UI components
+  - `@file-explorer/containers` - Main application containers
+  - `@file-explorer/contexts` - React context providers
+  - `@file-explorer/hooks` - Custom React hooks
+  - `@file-explorer/types` - TypeScript type definitions
+  - `@file-explorer/test` - Test utilities
+- **Import Order**: Structured imports for clear dependency visualization
+  1. External libraries (React, third-party packages)
+  2. Internal modules (using aliases)
+  3. Relative imports (same directory/files)
+- **Benefits**:
+  - Modular design with clear boundaries
+  - Minimal impact when restructuring internal modules
+  - Easy refactoring and maintenance
+  - Clear dependency relationships
+  - Consistent import patterns across the codebase
+
+### Test Organization
+
+- **Co-located Tests**: Tests placed in `__tests__` directories alongside source files
+- **Benefits**:
+  - Easy to find tests for specific components/modules
+  - Tests stay in sync with code changes
+  - Clear relationship between tests and implementation
+  - Simplified test discovery and maintenance
+  - Follows Jest convention for automatic test detection
 
 ### Data Structures
 
@@ -127,6 +158,20 @@ The In-Browser File Explorer is a fully functional, frontend-only file explorer 
 - **User Feedback**: Clear error messages displayed through ErrorDisplay component
 - **Error Recovery**: Graceful handling of edge cases with error clearing functionality
 - **Error Boundaries**: React ErrorBoundary components for catching and displaying errors
+
+### Error Boundary Implementation
+
+- **Multi-Level Protection**: Error boundaries at both App and FileExplorer levels
+- **Graceful Degradation**: Application continues functioning even when components fail
+- **User-Friendly Fallback**: Clean error UI with refresh option instead of white screen
+- **Development Support**: Detailed error information in development mode
+- **Custom Fallback**: Configurable fallback components for different error scenarios
+- **Error Reporting**: Optional error callback for logging and monitoring
+- **HOC Pattern**: `withErrorBoundary` higher-order component for easy wrapping
+- **Strategic Placement**:
+  - App-level boundary catches context and provider errors
+  - FileExplorer-level boundary isolates file system operations
+  - Prevents single component failures from crashing entire application
 
 ## Browser Compatibility
 
@@ -169,6 +214,12 @@ All planned TODOs have been completed! The application now includes:
 - **Web Workers**: Move heavy operations to background threads
 - **Indexing**: Create search indexes for faster lookups
 
+#### Code Organization Improvements
+
+- **Enhanced Module Boundaries**: Further refine module aliases for even clearer separation
+- **Import Analysis**: Automated tools to analyze and optimize import dependencies
+- **Barrel Exports**: Implement index.ts files for cleaner module exports
+
 ## Key Design Decisions
 
 1. **In-Memory Storage**: All data stored in JavaScript objects for simplicity
@@ -178,6 +229,10 @@ All planned TODOs have been completed! The application now includes:
 5. **Error Handling**: Comprehensive error handling with user-friendly messages
 6. **Modern CSS**: Tailwind CSS with Vite plugin for optimal build performance
 7. **Context Architecture**: Single FileSystemContext manages all file system state (future: consider breaking into smaller contexts)
+8. **Module Aliases**: Path aliases (@file-explorer/\*) enable modular design and minimize impact of structural changes
+9. **Import Organization**: Structured import order (external → internal → relative) for clear dependency visualization
+10. **Error Boundaries**: Multi-level error boundary strategy for graceful failure handling and user experience
+11. **Test Organization**: Co-located tests in `__tests__` directories for better maintainability and discovery
 
 ---
 
