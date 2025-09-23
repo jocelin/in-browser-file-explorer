@@ -21,11 +21,12 @@ describe('Backend Server Tests', () => {
 		app = express();
 
 		// Serve static files from the www directory
-		// For testing, we'll use a mock static path
+		// Use the same path resolution as the actual backend
 		const staticPath = path.join(process.cwd(), 'dist/www');
 		app.use('/', express.static(staticPath));
 
 		// Fallback to index.html for client-side routing (SPA)
+		// This should catch all routes that don't match static files
 		app.get('*', (req, res) => {
 			res.sendFile(path.join(staticPath, 'index.html'));
 		});
