@@ -32,10 +32,6 @@ export default defineConfig({
 				replacement: path.resolve(__dirname, './src/frontend/types'),
 			},
 			{
-				find: '@file-explorer/test',
-				replacement: path.resolve(__dirname, './src/test'),
-			},
-			{
 				find: '@file-explorer',
 				replacement: path.resolve(__dirname, './src'),
 			},

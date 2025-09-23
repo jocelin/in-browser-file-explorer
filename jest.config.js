@@ -22,7 +22,7 @@ export default {
 			testEnvironment: 'jsdom',
 			roots: ['<rootDir>/src/frontend'],
 			testMatch: ['**/*.spec.(ts|tsx)', '**/*.test.(ts|tsx)'],
-			setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.ts'],
+			setupFilesAfterEnv: ['<rootDir>/test/setupTests.ts'],
 			transform: {
 				'^.+\\.(ts|tsx)$': [
 					'ts-jest',
@@ -41,7 +41,7 @@ export default {
 				'^@file-explorer/contexts(/.*)?$': '<rootDir>/src/frontend/contexts$1',
 				'^@file-explorer/hooks(/.*)?$': '<rootDir>/src/frontend/hooks$1',
 				'^@file-explorer/types(/.*)?$': '<rootDir>/src/frontend/types$1',
-				'^@file-explorer/test(/.*)?$': '<rootDir>/src/test$1',
+				'^@file-explorer/test(/.*)?$': '<rootDir>/test$1',
 				'^@file-explorer/(.*)$': '<rootDir>/src/$1',
 			},
 		},
@@ -49,13 +49,13 @@ export default {
 	verbose: true,
 	collectCoverageFrom: [
 		'src/**/*.(ts|tsx)',
-		'!src/test/*',
 		'!**/*.(spec|test).(ts|tsx)',
 		'!src/**/*.d.ts',
 		'!src/**/index.ts',
 		'!src/backend/main.ts',
 		'!src/frontend/main.tsx',
 		'!src/frontend/types/**',
+		'!test/*',
 	],
 	coverageDirectory: 'coverage',
 	coverageReporters: ['text', 'lcov', 'html'],

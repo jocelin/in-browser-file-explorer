@@ -6,7 +6,7 @@
 	"author": "Jocelyn Lin, Gianluca Venturini <gianluca@stellarite.io>",
 	"license": "MIT",
 	"scripts": {
-		"build": "vite build && tsc",
+		"build": "vite build && tsc --project tsconfig.build.json",
 		"clean": "rm -rf dist/ coverage/",
 		"clean:all": "rm -rf node_modules/ dist/ coverage/",
 		"dev": "concurrently \"yarn dev:backend\" \"yarn dev:frontend\"",
