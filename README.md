@@ -120,23 +120,40 @@ yarn clean:all
 ├── src/
 │   ├── frontend/         # React frontend code
 │   │   ├── components/   # Reusable UI components
+│   │   │   ├── __tests__/ # Component test files
+│   │   │   ├── buttons.css # Button styles
+│   │   │   └── *.tsx     # React components
 │   │   ├── containers/   # Main application containers
+│   │   │   ├── __tests__/ # Container test files
+│   │   │   └── *.tsx     # Container components
 │   │   ├── contexts/     # React context providers
+│   │   │   ├── __tests__/ # Context test files
+│   │   │   └── *.tsx     # Context providers
 │   │   ├── hooks/        # Custom React hooks
+│   │   │   ├── __tests__/ # Hook test files
+│   │   │   └── *.ts      # Custom hooks
 │   │   ├── types/        # TypeScript type definitions
+│   │   │   └── *.ts      # Type definitions
 │   │   ├── App.tsx       # Main application component
+│   │   ├── App.spec.tsx  # App component tests
 │   │   ├── main.tsx      # Application entry point
 │   │   └── index.css     # Tailwind CSS styles
 │   ├── backend/          # Express backend code
+│   │   ├── __tests__/    # Backend test files
+│   │   └── main.ts       # Backend entry point
 │   └── test/             # Jest test setup and utilities
 ├── docs/                 # Project documentation
 ├── dist/                 # Build output directory
+│   ├── backend/          # Compiled backend code
+│   ├── frontend/         # Compiled frontend code
+│   └── www/              # Production web assets
 ├── coverage/             # Test coverage reports
 ├── index.html            # Frontend HTML template
 ├── vite.config.ts        # Vite configuration
 ├── jest.config.js        # Jest configuration
 ├── nodemon.json          # Nodemon configuration
 ├── tsconfig.json         # TypeScript configuration
+├── tsconfig.build.json   # Build-specific TypeScript config
 └── eslint.config.mjs     # ESLint configuration
 ```
 
