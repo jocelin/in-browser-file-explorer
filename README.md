@@ -2,6 +2,10 @@
 
 A fully functional, frontend-only file explorer built with React and TypeScript. This application provides a virtualized tree view with drag and drop functionality that can efficiently handle large file systems with thousands of files, featuring modern UI design and comprehensive testing.
 
+## 🚀 Live Demo
+
+**Try the application online:** [View Demo on GitHub Pages](https://jocelin.github.io/in-browser-file-explorer/)
+
 > **📖 For detailed application features and usage instructions, see [FILE_EXPLORER_README](./docs/FILE_EXPLORER_README.md)**
 
 ## Quick Start
@@ -75,6 +79,11 @@ yarn build
 # Start production server
 yarn start
 ```
+
+### GitHub Pages Deployment
+
+The application is automatically deployed to GitHub Pages and available at:
+**https://jocelin.github.io/in-browser-file-explorer/**
 
 ## Code Quality
 
